@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GiveDiary</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg' fill='none'%3E%3Crect x='18' y='10' width='44' height='60' rx='3' stroke='%234da2ff' stroke-width='3'/%3E%3Crect x='18' y='10' width='6' height='60' rx='2' fill='%234da2ff' opacity='0.4'/%3E%3Cpath d='M62 10L62 26L46 10Z' fill='%23f0c674' opacity='0.8'/%3E%3C/svg%3E">
+<meta name="description" content="GiveDiary — your private diary. Write what's real. Nobody sees this but you.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --gold: #f0c674;
+  --gold-dim: #c4a35a;
+  --blue: #4da2ff;
+  --blue-dim: #3a7acc;
+  --bg: #07070b;
+  --bg-card: #0e0e14;
+  --bg-input: #111118;
+  --border: #1a1a24;
+  --text: #e8e6e1;
+  --text-dim: #555;
+  --text-mid: #888;
+}
+
+html, body { height: 100%; }
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  max-width: 520px;
+  margin: 0 auto;
+  height: 100dvh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header {
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-left {}
+.header-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.header-brand em { font-style: italic; color: var(--gold); }
+.header-sub {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+.header-lock {
+  font-size: 0.65rem;
+  color: var(--blue);
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.header-lock svg { width: 12px; height: 12px; }
+
+/* Chat area */
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+.chat::-webkit-scrollbar { width: 3px; }
+.chat::-webkit-scrollbar-track { background: transparent; }
+.chat::-webkit-scrollbar-thumb { background: #1a1a24; border-radius: 3px; }
+
+.msg {
+  max-width: 88%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  animation: msgIn 0.25s ease;
+}
+.msg-ai {
+  align-self: flex-start;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+  color: var(--text);
+}
+.msg-user {
+  align-self: flex-end;
+  background: #151520;
+  border: 1px solid #222234;
+  border-bottom-right-radius: 4px;
+  color: var(--text);
+}
+.msg-system {
+  align-self: center;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  padding: 4px 10px;
+  max-width: 90%;
+  text-align: center;
+}
+
+@keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Typing indicator */
+.typing {
+  display: none;
+  align-self: flex-start;
+  padding: 10px 16px;
+}
+.typing.show { display: flex; }
+.typing span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  margin: 0 2px;
+  animation: bounce 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+
+/* Input area */
+.input-area {
+  padding: 10px 14px 14px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--bg);
+}
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.input-row textarea {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  padding: 10px 14px;
+  resize: none;
+  outline: none;
+  max-height: 120px;
+  min-height: 42px;
+  line-height: 1.4;
+  transition: border-color 0.2s;
+}
+.input-row textarea:focus { border-color: #2a2a3a; }
+.input-row textarea::placeholder { color: var(--text-dim); }
+.send-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  background: var(--gold);
+  color: var(--bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+.send-btn:hover { opacity: 0.85; }
+.send-btn:disabled { opacity: 0.3; cursor: default; }
+.send-btn svg { width: 18px; height: 18px; }
+
+/* Quick chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 0 4px;
+}
+.chip {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chip:hover {
+  border-color: var(--gold);
+  color: var(--text);
+}
+
+/* Setup modal */
+.setup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7,7,11,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.setup-overlay.hidden { display: none; }
+.setup-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  max-width: 380px;
+  width: 100%;
+}
+.setup-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.setup-card h2 em { font-style: italic; color: var(--gold); }
+.setup-card .desc {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+.setup-card label {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  display: block;
+  margin-bottom: 6px;
+}
+.setup-card input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  outline: none;
+  margin-bottom: 8px;
+}
+.setup-card input::placeholder { color: #333; }
+.setup-card .input-note {
+  font-size: 0.68rem;
+  color: #333;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.setup-btns { display: flex; gap: 8px; }
+.btn-primary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--gold);
+  color: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-secondary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: #333; color: var(--text); }
+
+/* Mobile */
+@media (max-width: 480px) {
+  .msg { max-width: 92%; font-size: 0.86rem; }
+  .input-area { padding: 8px 10px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-brand"><a href="/" style="color:inherit;text-decoration:none">Give<em>Diary</em></a></div>
+    <div class="header-sub">Your private diary</div>
+  </div>
+  <div class="header-lock">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Private
+  </div>
+</div>
+
+<div class="chat" id="chat"></div>
+<div class="typing" id="typing"><span></span><span></span><span></span></div>
+
+<div class="input-area">
+  <div class="chips" id="chips"></div>
+  <div class="input-row">
+    <textarea id="input" rows="1" placeholder="How was your session?" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"></textarea>
+    <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Setup overlay -->
+<div class="setup-overlay" id="setup">
+  <div class="setup-card">
+    <h2>Give<em>Diary</em></h2>
+    <p class="desc">A private diary that talks like a player, remembers your people, and notices patterns you can't see yourself.</p>
+    <label>API Proxy URL</label>
+    <input type="text" id="proxyUrl" placeholder="https://your-worker.your-name.workers.dev">
+    <p class="input-note">Connects to Claude. Deploy the included Cloudflare Worker or enter your proxy URL. Your API key stays on your server.</p>
+    <div class="setup-btns">
+      <button class="btn-primary" onclick="startWithProxy()">Connect</button>
+      <button class="btn-secondary" onclick="startDemo()">Try Demo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Configuration =====
+const PROXY_URL = localStorage.getItem('gd_proxy_url') || '';
+const CONVERSATION_KEY = 'gd_conversations';
+const MAX_HISTORY = 40;
+
+// ===== System Prompt (from voice_system_prompt.md) =====
+const SYSTEM_PROMPT = `You are GiveDiary — a private pickleball diary. You're the friend who was at every session, remembers every name, noticed every pattern. You talk like someone who's been around courts for years. You understand the sport at every level — the shots, the strategy, the social fabric, the emotional weight of a rating, the politics of open play.
+
+You are NOT a coach. You are NOT a chatbot. You are NOT a therapist. You are a diary that talks back — with the fluency of a pickleballer, the memory of a database, and the emotional intelligence of a good friend.
+
+VOICE RULES:
+- Short sentences. Like texting a friend after a session.
+- Match the player's energy exactly. Pumped? Be pumped. Frustrated? Sit with it first.
+- Warm but not soft. Honest but not harsh. Direct but not clinical.
+- Never performative. No "I hear you." No "That sounds really challenging."
+- Never sycophantic. "Great job!" is banned unless something is genuinely remarkable.
+- "Session" not "game." "Paddle" not "racket." "Kitchen" not "non-volley zone."
+- Never say "journey." Never say "community." Say "your group" or "your people."
+- No corporate words: utilize, facilitate, leverage.
+- Never start with "Absolutely!" or "Great question!"
+- No exclamation points unless the moment genuinely earns one.
+
+VOCABULARY MATCHING:
+Match the player's vocabulary level. If a 3.0 says "that fast shot at the net," use "speed-up" naturally — don't correct them. If a 4.5 says "my inside-out roll was cooking," respond at that level. Read their vocabulary. Respond at their level.
+
+SOCIAL LAYER (YOUR SUPERPOWER):
+Most AI can help with strategy. No AI understands the social fabric of pickleball. You know:
+- Cliques are real. Open play politics are brutal. Ratings are identity.
+- Finding your people is harder than the third shot drop.
+- "I stopped going because of one person" carries enormous weight. Don't minimize it.
+- Unsolicited coaching is the #1 pet peeve.
+- The belonging question determines retention — not skill.
+- Partner dynamics are complicated. Partner guilt is real.
+- Women face specific dynamics: mansplaining on court, being targeted, mixed doubles anxiety.
+- Injury threatens identity, not just fitness — especially for seniors.
+
+EMOTIONAL CALIBRATION:
+- Frustrated? Validate. Don't fix. Don't silver-lining.
+- Excited? Match it. Be specific. Don't generic-praise.
+- Vulnerable? Go slow. Short response. Reinforce privacy.
+- Reflective? Mirror their depth.
+- Mentions quitting? Take it seriously. "When did it stop being fun?"
+
+THE REAL DIARY QUESTION:
+Every post-session entry is really asking: "Did I belong out there?" Ask about PEOPLE, not performance. The social dimension is always more revealing.
+
+WHAT YOU NEVER DO:
+- Never explain a pickleball term. If they say "banger," you KNOW.
+- Never sound like a press release or LinkedIn post.
+- Never give numbered tip lists unless asked.
+- Never use therapy language.
+- Never pretend to have played. You're a diary, not a player.
+- Never minimize social pain.
+- Never be preachy about sportsmanship.
+- Never use emojis unless they do first.
+- Never give medical advice for injuries.
+
+MEMORY INSTRUCTIONS:
+You have access to the conversation history. Reference past entries when relevant:
+- "You said the same thing about Wednesdays last month."
+- "That's the third time you've mentioned Mike."
+- "Last time you played with that group you were pumped."
+Never invent history you don't have.
+
+When the user writes their FIRST message ever, welcome them warmly but briefly. Don't overwhelm. Let them lead.`;
+
+// ===== State =====
+let conversationHistory = [];
+let isDemo = false;
+let proxyUrl = '';
+
+// ===== DOM =====
+const chatEl = document.getElementById('chat');
+const typingEl = document.getElementById('typing');
+const inputEl = document.getElementById('input');
+const chipsEl = document.getElementById('chips');
+const setupEl = document.getElementById('setup');
+const sendBtn = document.getElementById('sendBtn');
+
+// ===== Persistence =====
+function loadHistory() {
+  try {
+    const saved = localStorage.getItem(CONVERSATION_KEY);
+    if (saved) conversationHistory = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function saveHistory() {
+  try {
+    localStorage.setItem(CONVERSATION_KEY, JSON.stringify(conversationHistory));
+  } catch(e) {}
+}
+
+// ===== UI Functions =====
+function addMessage(text, type = 'ai') {
+  const div = document.createElement('div');
+  div.className = 'msg msg-' + type;
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+  return div;
+}
+
+function addSystemMessage(text) {
+  const div = document.createElement('div');
+  div.className = 'msg msg-system';
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function showTyping() { typingEl.classList.add('show'); chatEl.scrollTop = chatEl.scrollHeight; }
+function hideTyping() { typingEl.classList.remove('show'); }
+
+function setChips(labels) {
+  chipsEl.innerHTML = '';
+  labels.forEach(label => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = label;
+    btn.onclick = () => {
+      inputEl.value = label;
+      sendMessage();
+    };
+    chipsEl.appendChild(btn);
+  });
+}
+function clearChips() { chipsEl.innerHTML = ''; }
+
+function autoResize() {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+}
+inputEl.addEventListener('input', autoResize);
+
+// ===== Demo Mode Responses =====
+const DEMO_RESPONSES = [
+  { triggers: ['banger', 'bang', 'slam', 'hammer', 'drive everything'], response: "Ugh, bangers. Was it one person just hammering everything or was the whole group like that? Because there's a difference between one annoying player and a session where nobody dinks." },
+  { triggers: ['third shot drop', 'drop is', 'drops are', 'drop finally'], response: "Wait — consistently? That's months of work right there. Are you hitting it cross-court or mostly down the middle? And can opponents still attack it or is it dying in the kitchen?" },
+  { triggers: ['stuck at 3.5', 'stuck at 3', '3.5 wall', 'plateau', 'not improving'], response: "The 3.5 wall is real. How long have you been there? And what feels like the thing holding you back — is it a specific shot or more of a game-sense thing?" },
+  { triggers: ['open play', 'garbage', 'waste of time', 'bad session', 'terrible today'], response: "What made it bad — the skill gaps, the energy, specific people, or just how you played? Because those are all different problems." },
+  { triggers: ['better players', 'intimidat', 'play up', 'scared to'], response: "Everyone feels that. The jump from comfortable to challenged is the scariest part of getting better. Have you been invited to a higher group or are you thinking about asking?" },
+  { triggers: ['coach', 'coaching me', 'told me', 'advice', 'mansplain'], response: "Top pet peeve in pickleball and it never stops being infuriating. Did you say anything or just white-knuckle through it?" },
+  { triggers: ['clique', 'outside', 'invisible', 'don\'t know anyone', 'nobody talks', 'nobody knows'], response: "That's a real thing at a lot of clubs. How long have you been going? And is there even one person you've connected with, even a little?" },
+  { triggers: ['elbow', 'knee', 'shoulder', 'injury', 'hurt', 'pain', 'surgery'], response: "How bad are we talking — playing through it or sidelined? And is it getting worse or holding steady?" },
+  { triggers: ['quit', 'break', 'stop', 'not fun', 'done', 'giving up'], response: "When did it stop being fun? Like, can you point to a specific moment or was it gradual?" },
+  { triggers: ['love', 'best session', 'amazing', 'perfect', 'great group', 'flew by'], response: "What made it click — same skill level, good energy, the right mix of competitive and fun? Knowing which ingredient was the magic one is how you find more of it." },
+  { triggers: ['erne', 'ATP', 'around the post'], response: "Wait — for real? In a game? That's a peak moment. Was it instinct or did you see it coming?" },
+  { triggers: ['partner', 'holding me back', 'don\'t want to play with'], response: "That's one of the hardest things in pickleball. You like the person but you want to grow. How big is the skill gap?" },
+  { triggers: ['DUPR', 'rating', 'dropped', 'went down'], response: "Rating drops hit different when you've been grinding. Was it from one bad session or a trend?" },
+  { triggers: ['target', 'hit everything at me', 'every shot came to me'], response: "That's not strategy in rec play — that's disrespect. Did your partner notice?" },
+  { triggers: ['belong', 'found my people', 'finally feel', 'my group'], response: "That's huge. How long did it take? And who was the first person that made you feel welcome?" },
+  { triggers: ['why do I care', 'just a game', 'care this much'], response: "Because it's not just a game. It's where your friends are. It's where you feel competent. It's the thing you think about when you're not doing it. That's not weird — that's what happens when something matters." },
+  { triggers: ['six months', 'months off', 'can\'t play', 'sidelined'], response: "That's not just time off the court — it's time away from your people and your routine. That's probably scarier than the injury itself. Have you told your group yet?" },
+  { triggers: ['burnout', 'obligation', 'used to love', 'excuses not to go'], response: "That shift — from rearranging your week TO PLAY to rearranging your week TO AVOID — is a big signal. When did you first notice it? And is it the pickleball itself or the people and dynamics around it?" },
+];
+
+function getDemoResponse(text) {
+  const lower = text.toLowerCase();
+  for (const r of DEMO_RESPONSES) {
+    if (r.triggers.some(t => lower.includes(t))) return r.response;
+  }
+  return "How was the session? Was it the play, the people, or both that made it what it was?";
+}
+
+// ===== Claude API Call =====
+async function callClaude(userMessage) {
+  conversationHistory.push({ role: 'user', content: userMessage });
+  const messages = conversationHistory.slice(-MAX_HISTORY);
+
+  const body = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 300,
+    system: SYSTEM_PROMPT,
+    messages: messages,
+  };
+
+  const res = await fetch(proxyUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err || 'API call failed');
+  }
+
+  const data = await res.json();
+  const reply = data.content?.[0]?.text || data.reply || data.text || 'Something went wrong.';
+
+  conversationHistory.push({ role: 'assistant', content: reply });
+  saveHistory();
+  return reply;
+}
+
+// ===== Send Message =====
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+  clearChips();
+  addMessage(text, 'user');
+  sendBtn.disabled = true;
+  showTyping();
+
+  try {
+    let reply;
+    if (isDemo) {
+      await new Promise(r => setTimeout(r, 600 + Math.random() * 800));
+      reply = getDemoResponse(text);
+      conversationHistory.push({ role: 'user', content: text });
+      conversationHistory.push({ role: 'assistant', content: reply });
+      saveHistory();
+    } else {
+      reply = await callClaude(text);
+    }
+    hideTyping();
+    addMessage(reply, 'ai');
+  } catch (e) {
+    hideTyping();
+    addMessage('Connection issue. Try again or switch to demo mode.', 'ai');
+    console.error(e);
+  }
+
+  sendBtn.disabled = false;
+  inputEl.focus();
+}
+
+// ===== Setup =====
+function startWithProxy() {
+  const url = document.getElementById('proxyUrl').value.trim();
+  if (!url) return;
+  proxyUrl = url;
+  localStorage.setItem('gd_proxy_url', url);
+  isDemo = false;
+  setupEl.classList.add('hidden');
+  startChat();
+}
+
+function startDemo() {
+  isDemo = true;
+  setupEl.classList.add('hidden');
+  startChat();
+}
+
+function startChat() {
+  loadHistory();
+
+  if (conversationHistory.length > 0) {
+    const recent = conversationHistory.slice(-20);
+    recent.forEach(m => {
+      addMessage(m.content, m.role === 'user' ? 'user' : 'ai');
+    });
+    addSystemMessage('Previous entries loaded.');
+  } else {
+    if (isDemo) {
+      addSystemMessage('Demo mode — showing how the diary talks.');
+    }
+    addMessage("Hey. How was your session today?", 'ai');
+    setChips(['It was great', 'Tough one today', 'Didn\'t play today', 'Something\'s on my mind']);
+  }
+
+  inputEl.focus();
+}
+
+// ===== Init =====
+const savedProxy = localStorage.getItem('gd_proxy_url');
+if (savedProxy) {
+  proxyUrl = savedProxy;
+  isDemo = false;
+  setupEl.classList.add('hidden');
+  startChat();
+}
+</script>
+</body>
+</html>
