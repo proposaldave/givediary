@@ -32,7 +32,7 @@ nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:c
 .page{max-width:620px;padding:0 2rem}
 
 /* HERO */
-.hero{min-height:85vh;display:flex;flex-direction:column;justify-content:center;position:relative}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,12vw,8rem);font-weight:700;line-height:0.95;letter-spacing:-0.04em;opacity:0;animation:up 1s ease 0.2s forwards}
 .hero h1 em{font-style:italic;color:#f0c674}
 .hero::before{content:'';position:fixed;top:8%;right:-12%;width:500px;height:500px;background:radial-gradient(circle,rgba(240,198,116,0.025) 0%,transparent 70%);pointer-events:none}
@@ -41,9 +41,10 @@ nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:c
 .people{padding:2rem 0 4rem}
 .story-line{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.5rem);line-height:1.65;color:#555;font-weight:400;margin-bottom:1.8rem}
 .story-line.accent{color:#999}
+.story-line strong{color:#e8e6e1;font-weight:700}
 
 /* TURN — bigger, more breathing room */
-.turn{padding:6rem 0}
+.turn{padding:12rem 0 6rem}
 .turn p{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.4;color:#444;font-weight:400}
 .turn p strong{color:#e8e6e1;font-weight:700}
 
@@ -185,8 +186,8 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
   <!-- ACT 2: EVERYONE -->
   <section class="people reveal">
     <div class="story-line">Everyone gives something to their community.</div>
-    <div class="story-line">The energy. The consistency. The way of making people feel welcome. That's what a community is — not the place, not the schedule. The people, and what they give to each other.</div>
-    <div class="story-line accent">But it's invisible. What people give to their communities has no record. No home. It lives in the hearts and minds of the people who experience it — and nowhere else.</div>
+    <div class="story-line">The energy. The consistency. The way of making people feel welcome. <strong>That's what a community is</strong> — not the place, not the schedule. The people, and what they give to each other.</div>
+    <div class="story-line accent"><strong>But it's invisible.</strong> What people give to their communities has no record. No home. It lives in the hearts and minds of the people who experience it — and nowhere else.</div>
   </section>
 
   <!-- ACT 3: WHAT IF — bigger, more breathing room -->
@@ -197,8 +198,8 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
   <!-- ACT 4: GIVEDIARY REVEAL -->
   <section class="resolve reveal">
     <div class="resolve-name">Give<em>Diary</em></div>
-    <p class="resolve-tagline">Record the giving → Watch the community thrive.</p>
-    <p class="resolve-desc">A private diary of who gives — <strong>through your eyes, for your eyes only.</strong></p>
+    <p class="resolve-tagline">Record the giving → Watch your community thrive.</p>
+    <p class="resolve-desc">Your private diary of who gives — <strong>through your eyes, for your eyes only.</strong></p>
   </section>
 
   <!-- ACT 5: GIVE + DIARY PANELS WITH ANIMATIONS -->
