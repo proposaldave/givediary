@@ -3,183 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GiveDiary — V53</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 36 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M27.94 10.59L18.36 1.94C18.16 1.76 17.84 1.76 17.64 1.94L8.06 10.59C2.86 15.28-0.52 22.56 0.06 28.8C0.86 37.78 8.62 43.18 18 43.18C27.38 43.18 35.14 37.78 35.94 28.8C36.52 22.56 33.14 15.28 27.94 10.59Z' fill='%234DA2FF'/%3E%3C/svg%3E">
+<title>GiveDiary</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 36 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M27.94 10.59L18.36 1.94C18.16 1.76 17.84 1.76 17.64 1.94L8.06 10.59C2.86 15.28-0.52 22.56 0.06 28.8C0.86 37.78 8.62 43.18 18 43.18C27.38 43.18 35.14 37.78 35.94 28.8C36.52 22.56 33.14 15.28 27.94 10.59Z' fill='%23f0c674'/%3E%3C/svg%3E">
+<meta name="description" content="GiveDiary — a private record of what we give to each other in our communities. Through your eyes, for your eyes only.">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: #07070b; color: #e8e6e1; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-  body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E"); pointer-events: none; z-index: 10; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#07070b;color:#e8e6e1;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;z-index:10}
 
-  nav { padding: 1.2rem 2.5rem; flex-shrink: 0; z-index: 5; position: relative; }
+/* NAV */
+nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:5}
+.logo{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;letter-spacing:-0.02em}
+.logo em{font-style:italic;color:#f0c674}
+.nav-contact{font-size:0.8rem;color:#444;text-decoration:none;transition:color 0.3s;padding:0.5rem 0}
+.nav-contact:hover{color:#e8e6e1}
 
-  .page { flex: 1; display: flex; flex-direction: column; padding: 0 2.5rem 1rem; }
+/* PAGE CONTAINER */
+.page{max-width:620px;padding:0 2rem}
 
-  .title-row { flex-shrink: 0; padding-bottom: 1.2rem; }
-  h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 0.6rem; opacity: 0; animation: up 0.9s ease 0.2s forwards; }
-  h1 em { font-style: italic; color: #4da2ff; }
-  .title-row .closer { font-family: 'Playfair Display', serif; font-size: clamp(0.9rem, 1.8vw, 1.1rem); font-style: italic; color: #5a5a68; opacity: 0; animation: up 0.9s ease 0.4s forwards; }
+/* HERO */
+.hero{min-height:85vh;display:flex;flex-direction:column;justify-content:center;position:relative}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,12vw,8rem);font-weight:700;line-height:0.95;letter-spacing:-0.04em;opacity:0;animation:up 1s ease 0.2s forwards}
+.hero h1 em{font-style:italic;color:#f0c674}
+.hero::before{content:'';position:fixed;top:8%;right:-12%;width:500px;height:500px;background:radial-gradient(circle,rgba(240,198,116,0.025) 0%,transparent 70%);pointer-events:none}
 
-  /* Side by side: Give LEFT | Arrow | Diary RIGHT */
-  .panels { flex: 1; display: flex; gap: 2rem; align-items: center; }
+/* STORY */
+.people{padding:2rem 0 4rem}
+.story-line{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.5rem);line-height:1.65;color:#555;font-weight:400;margin-bottom:1.8rem}
+.story-line.accent{color:#999}
 
-  .panel { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+/* TURN */
+.turn{padding:4rem 0}
+.turn p{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.7rem);line-height:1.6;color:#444;font-weight:400;margin-bottom:1.5rem}
+.turn p strong{color:#e8e6e1;font-weight:700}
 
-  .give-panel { opacity: 0; animation: up 0.9s ease 0.4s forwards; }
-  .diary-panel { opacity: 0; animation: up 0.9s ease 0.7s forwards; }
+/* RESOLVE */
+.resolve{padding:3rem 0 2.5rem;border-top:1px solid #1a1a24}
+.resolve-name{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,8vw,4.5rem);font-weight:700;letter-spacing:-0.03em;margin-bottom:1.2rem}
+.resolve-name em{font-style:italic;color:#f0c674}
+.resolve-desc{font-size:clamp(0.9rem,2.5vw,1rem);color:#555;line-height:1.8;font-weight:300;max-width:460px;margin-bottom:2rem}
+.resolve-desc strong{color:#999;font-weight:400}
+.resolve-tagline{font-family:'Playfair Display',serif;font-size:clamp(0.95rem,2.5vw,1.4rem);font-style:italic;color:#5a5a68;margin-bottom:2rem}
 
-  .panel-label { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.6rem; text-align: center; }
-  .give-panel .panel-label { color: #f0c674; }
-  .diary-panel .panel-label { color: #4da2ff; }
+/* PANELS */
+.panels{display:flex;gap:1.5rem;align-items:flex-start;padding:2.5rem 0 3.5rem;border-top:1px solid #1a1a24}
+.panel{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}
+.panel-label{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.3rem);font-weight:700;margin-bottom:0.5rem;text-align:center}
+.panel-label.give{color:#f0c674}
+.panel-label.diary{color:#4da2ff}
+.panel-text{font-size:clamp(0.75rem,1.8vw,0.82rem);color:#5a5a68;line-height:1.7;font-weight:300;text-align:center;max-width:260px;margin-bottom:1rem}
+.arrow{flex-shrink:0;width:24px;display:flex;align-items:center;justify-content:center;padding-top:1.5rem}
+.arrow svg{width:18px;height:18px}
 
-  .panel-text { font-size: 0.82rem; color: #5a5a68; line-height: 1.7; font-weight: 300; text-align: center; max-width: 280px; margin-bottom: 1rem; }
+/* GIVE canvas */
+.give-canvas{width:100%;max-width:260px;height:180px;position:relative}
+.g-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#e8e6e1;opacity:0.7}
+.g-dot:nth-child(1){top:15%;left:12%}.g-dot:nth-child(2){top:12%;left:52%}.g-dot:nth-child(3){top:20%;left:85%}
+.g-dot:nth-child(4){top:75%;left:18%}.g-dot:nth-child(5){top:68%;left:55%}.g-dot:nth-child(6){top:78%;left:82%}
+.g-dot:nth-child(7){top:45%;left:38%}
+.gp{position:absolute;width:3px;height:3px;border-radius:50%;background:#f0c674;opacity:0;box-shadow:0 0 8px rgba(240,198,100,0.5)}
+.gp:nth-child(8){top:15%;left:12%;animation:pulseTo 2.8s ease 0.5s infinite;--tx:100px;--ty:100px}
+.gp:nth-child(9){top:12%;left:52%;animation:pulseTo 3s ease 1s infinite;--tx:-80px;--ty:100px}
+.gp:nth-child(10){top:20%;left:85%;animation:pulseTo 2.7s ease 1.5s infinite;--tx:-120px;--ty:50px}
+.gp:nth-child(11){top:75%;left:18%;animation:pulseTo 3.1s ease 2s infinite;--tx:90px;--ty:-60px}
+.gp:nth-child(12){top:68%;left:55%;animation:pulseTo 2.9s ease 2.5s infinite;--tx:-45px;--ty:-50px}
+.gp:nth-child(13){top:45%;left:38%;animation:pulseTo 2.6s ease 3s infinite;--tx:40px;--ty:-65px}
 
-  /* GIVE canvas */
-  .give-canvas { width: 280px; height: 220px; position: relative; }
+/* DIARY canvas */
+.diary-canvas{width:100%;max-width:260px;height:180px;position:relative}
+.d-vault{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:220px;height:80%;max-height:160px;border:2.5px solid rgba(77,162,255,0.3);border-radius:6px;box-shadow:0 0 15px rgba(77,162,255,0.06)}
+.d-vault-spine{position:absolute;left:0;top:0;width:5px;height:100%;background:rgba(77,162,255,0.4);border-radius:3px 0 0 3px}
+.d-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#e8e6e1;opacity:0.7}
+.d-dot:nth-child(3){top:18%;left:20%}.d-dot:nth-child(4){top:15%;left:52%}.d-dot:nth-child(5){top:22%;left:80%}
+.d-dot:nth-child(6){top:72%;left:22%}.d-dot:nth-child(7){top:65%;left:55%}.d-dot:nth-child(8){top:74%;left:78%}
+.d-dot:nth-child(9){top:44%;left:40%}
+.dp{position:absolute;width:3px;height:3px;border-radius:50%;background:#f0c674;opacity:0;box-shadow:0 0 6px rgba(240,198,100,0.4)}
+.dp:nth-child(10){top:18%;left:20%;animation:pulseTo 3s ease 0.5s infinite;--tx:60px;--ty:50px}
+.dp:nth-child(11){top:15%;left:52%;animation:pulseTo 2.8s ease 1s infinite;--tx:-50px;--ty:50px}
+.dp:nth-child(12){top:72%;left:22%;animation:pulseTo 3.2s ease 1.5s infinite;--tx:65px;--ty:-15px}
+.dp:nth-child(13){top:44%;left:40%;animation:pulseTo 2.9s ease 2s infinite;--tx:-30px;--ty:-25px}
+.d-lock-row{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0.6rem}
+.d-lock-icon{width:36px;height:36px;border:1px solid rgba(77,162,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:lockPulse 3s ease-in-out infinite}
+.d-lock-icon svg{width:14px;height:14px}
 
-  .g-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #e8e6e1; opacity: 0; }
-  .g-dot:nth-child(1) { top: 15%; left: 12%; animation: dotIn 0.5s ease 1s forwards; }
-  .g-dot:nth-child(2) { top: 12%; left: 52%; animation: dotIn 0.5s ease 1.15s forwards; }
-  .g-dot:nth-child(3) { top: 20%; left: 85%; animation: dotIn 0.5s ease 1.3s forwards; }
-  .g-dot:nth-child(4) { top: 75%; left: 18%; animation: dotIn 0.5s ease 1.45s forwards; }
-  .g-dot:nth-child(5) { top: 68%; left: 55%; animation: dotIn 0.5s ease 1.6s forwards; }
-  .g-dot:nth-child(6) { top: 78%; left: 82%; animation: dotIn 0.5s ease 1.75s forwards; }
-  .g-dot:nth-child(7) { top: 45%; left: 38%; animation: dotIn 0.5s ease 1.9s forwards; }
+/* CONTACT */
+.contact{padding:2.5rem 0}
+.contact a{font-size:0.85rem;color:#555;text-decoration:none;border-bottom:1px solid #1e1e2a;padding:0.5rem 0 0.25rem;transition:all 0.3s;display:inline-block}
+.contact a:hover{color:#f0c674;border-color:#f0c674}
 
-  /* Multi-directional pulses */
-  .gp { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #f0c674; opacity: 0; box-shadow: 0 0 8px rgba(240,198,100,0.5); }
-  .gp:nth-child(8)  { top: 15%; left: 12%; animation: pulseTo 2.8s ease 2.2s infinite; --tx: 112px; --ty: 117px; }
-  .gp:nth-child(9)  { top: 12%; left: 52%; animation: pulseTo 3s ease 2.5s infinite; --tx: -92px; --ty: 123px; }
-  .gp:nth-child(10) { top: 20%; left: 85%; animation: pulseTo 2.7s ease 2.8s infinite; --tx: -132px; --ty: 55px; }
-  .gp:nth-child(11) { top: 75%; left: 18%; animation: pulseTo 3.1s ease 3.1s infinite; --tx: 104px; --ty: -66px; }
-  .gp:nth-child(12) { top: 68%; left: 55%; animation: pulseTo 2.9s ease 3.4s infinite; --tx: -48px; --ty: -51px; }
-  .gp:nth-child(13) { top: 78%; left: 82%; animation: pulseTo 3.2s ease 3.7s infinite; --tx: -124px; --ty: -72px; }
-  .gp:nth-child(14) { top: 45%; left: 38%; animation: pulseTo 2.6s ease 4s infinite; --tx: 40px; --ty: -72px; }
-  .gp:nth-child(15) { top: 15%; left: 12%; animation: pulseTo 3s ease 4.3s infinite; --tx: 204px; --ty: 11px; }
-  .gp:nth-child(16) { top: 68%; left: 55%; animation: pulseTo 2.8s ease 4.6s infinite; --tx: 76px; --ty: 22px; }
-  .gp:nth-child(17) { top: 45%; left: 38%; animation: pulseTo 3.1s ease 4.9s infinite; --tx: -73px; --ty: 66px; }
+footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 
-  /* Arrow between panels */
-  .arrow { flex-shrink: 0; width: 40px; display: flex; align-items: center; justify-content: center; opacity: 0; animation: fadeIn 1s ease 2.5s forwards; }
-  .arrow svg { width: 24px; height: 24px; }
+/* ANIMATIONS */
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseTo{0%{opacity:0;transform:translate(0,0) scale(1)}15%{opacity:0.7}85%{opacity:0.2}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.4)}}
+@keyframes lockPulse{0%,100%{box-shadow:0 0 0 rgba(77,162,255,0)}50%{box-shadow:0 0 20px rgba(77,162,255,0.12)}}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
-  /* DIARY canvas */
-  .diary-canvas { width: 280px; height: 220px; position: relative; }
+/* TABLET */
+@media(max-width:768px){
+  nav{padding:1.2rem 1.5rem}
+  .page{padding:0 1.5rem}
+  .panels{flex-direction:column;gap:2.5rem;align-items:center}
+  .arrow{transform:rotate(90deg);padding-top:0;width:24px;height:24px}
+  .give-canvas,.diary-canvas{max-width:300px;height:200px}
+  .d-vault{width:90%;max-width:260px;height:85%;max-height:180px}
+  .panel-text{max-width:320px}
+  .people{padding:1.5rem 0 3.5rem}
+  .turn{padding:3rem 0}
+  .resolve{padding:2.5rem 0 2rem}
+  .hero{min-height:75vh}
+  footer{padding:2.5rem 1.5rem 1.5rem}
+}
 
-  .d-vault { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 240px; height: 200px; border: 2.5px solid rgba(77,162,255,0); border-radius: 6px; animation: vaultIn 1.5s ease 3s forwards; box-shadow: 0 0 0 rgba(77,162,255,0); }
-  .d-vault-spine { position: absolute; left: 0; top: 0; width: 5px; height: 100%; background: rgba(77,162,255,0); border-radius: 3px 0 0 3px; animation: spineIn 1.5s ease 3s forwards; }
+/* SMARTPHONE */
+@media(max-width:480px){
+  nav{padding:1rem 1.2rem}
+  .page{padding:0 1.2rem;max-width:100%}
+  .hero{min-height:70vh}
+  .hero h1{font-size:clamp(3rem,15vw,5rem)}
+  .story-line{font-size:clamp(1rem,4vw,1.2rem);margin-bottom:1.5rem}
+  .turn p{font-size:clamp(1.1rem,4.5vw,1.4rem)}
+  .resolve-name{font-size:clamp(2rem,10vw,3rem)}
+  .resolve-desc{font-size:0.9rem}
+  .resolve-tagline{font-size:clamp(0.9rem,3.5vw,1.1rem)}
+  .panels{gap:2rem;padding:2rem 0 3rem}
+  .panel-label{font-size:1.1rem}
+  .panel-text{font-size:0.8rem;max-width:280px}
+  .give-canvas,.diary-canvas{max-width:260px;height:170px}
+  .d-vault{width:88%;height:82%}
+  .gp:nth-child(8){--tx:70px;--ty:70px}
+  .gp:nth-child(9){--tx:-60px;--ty:70px}
+  .gp:nth-child(10){--tx:-80px;--ty:35px}
+  .gp:nth-child(11){--tx:60px;--ty:-40px}
+  .gp:nth-child(12){--tx:-30px;--ty:-35px}
+  .gp:nth-child(13){--tx:30px;--ty:-45px}
+  .dp:nth-child(10){--tx:45px;--ty:35px}
+  .dp:nth-child(11){--tx:-35px;--ty:35px}
+  .dp:nth-child(12){--tx:45px;--ty:-10px}
+  .dp:nth-child(13){--tx:-20px;--ty:-18px}
+  .contact a{font-size:0.9rem;padding:0.6rem 0 0.3rem}
+  .people{padding:1rem 0 3rem}
+  .turn{padding:2.5rem 0}
+  .resolve{padding:2rem 0 1.5rem}
+  footer{padding:2rem 1.2rem 1.5rem}
+}
 
-  .d-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #e8e6e1; opacity: 0; }
-  .d-dot:nth-child(3)  { top: 18%; left: 20%; animation: dotIn 0.4s ease 3.5s forwards; }
-  .d-dot:nth-child(4)  { top: 15%; left: 52%; animation: dotIn 0.4s ease 3.65s forwards; }
-  .d-dot:nth-child(5)  { top: 22%; left: 80%; animation: dotIn 0.4s ease 3.8s forwards; }
-  .d-dot:nth-child(6)  { top: 72%; left: 22%; animation: dotIn 0.4s ease 3.95s forwards; }
-  .d-dot:nth-child(7)  { top: 65%; left: 55%; animation: dotIn 0.4s ease 4.1s forwards; }
-  .d-dot:nth-child(8)  { top: 74%; left: 78%; animation: dotIn 0.4s ease 4.25s forwards; }
-  .d-dot:nth-child(9)  { top: 44%; left: 40%; animation: dotIn 0.4s ease 4.4s forwards; }
-
-  .dp { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #f0c674; opacity: 0; box-shadow: 0 0 6px rgba(240,198,100,0.4); }
-  .dp:nth-child(10) { top: 18%; left: 20%; animation: pulseTo 3s ease 5s infinite; --tx: 70px; --ty: 57px; }
-  .dp:nth-child(11) { top: 15%; left: 52%; animation: pulseTo 2.8s ease 5.3s infinite; --tx: -56px; --ty: 57px; }
-  .dp:nth-child(12) { top: 72%; left: 22%; animation: pulseTo 3.2s ease 5.6s infinite; --tx: 72px; --ty: -15px; }
-  .dp:nth-child(13) { top: 44%; left: 40%; animation: pulseTo 2.9s ease 5.9s infinite; --tx: -36px; --ty: -28px; }
-  .dp:nth-child(14) { top: 65%; left: 55%; animation: pulseTo 3.1s ease 6.2s infinite; --tx: 50px; --ty: 15px; }
-  .dp:nth-child(15) { top: 22%; left: 80%; animation: pulseTo 2.7s ease 6.5s infinite; --tx: -88px; --ty: 22px; }
-
-  /* Lock + Sui badge */
-  .d-lock-row { position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 0.6rem; opacity: 0; animation: lockIn 0.8s ease 5s forwards; }
-  .d-lock-icon { width: 36px; height: 36px; border: 1px solid rgba(77,162,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: lockPulse 3s ease-in-out 6s infinite; }
-  .d-lock-icon svg { width: 14px; height: 14px; }
-  .d-sui-badge { display: flex; align-items: center; gap: 0.3rem; font-size: 0.55rem; color: #333; text-transform: uppercase; letter-spacing: 0.1em; }
-  .d-sui-badge svg { width: 10px; height: 12px; }
-
-  .closer { flex-shrink: 0; text-align: center; padding: 0.5rem 0 0.8rem; opacity: 0; animation: up 0.9s ease 1s forwards; }
-  .closer p { font-family: 'Playfair Display', serif; font-size: clamp(0.95rem, 2vw, 1.2rem); font-style: italic; color: #3a3a48; }
-  .contact-row { flex-shrink: 0; padding: 0.5rem 0; opacity: 0; animation: up 0.9s ease 1.2s forwards; }
-  .contact-row a { font-size: 0.8rem; color: #7a7a88; text-decoration: none; border-bottom: 1px solid #222; padding-bottom: 0.25rem; transition: all 0.3s; }
-  .contact-row a:hover { color: #4da2ff; border-color: #4da2ff; }
-
-  footer { padding: 0.8rem 2.5rem; display: flex; justify-content: flex-end; align-items: center; position: relative; z-index: 5; flex-shrink: 0; }
-  .footer-right { font-size: 0.65rem; color: #333; }
-
-  @keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes dotIn { from { opacity: 0; transform: scale(0); } to { opacity: 0.8; transform: scale(1); } }
-  @keyframes pulseTo {
-    0% { opacity: 0; transform: translate(0, 0) scale(1); }
-    15% { opacity: 0.7; }
-    85% { opacity: 0.2; }
-    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.4); }
-  }
-  @keyframes vaultIn { from { border-color: rgba(77,162,255,0); box-shadow: 0 0 0 rgba(77,162,255,0); } to { border-color: rgba(77,162,255,0.3); box-shadow: 0 0 15px rgba(77,162,255,0.06); } }
-  @keyframes spineIn { from { background: rgba(77,162,255,0); } to { background: rgba(77,162,255,0.4); } }
-  @keyframes lockIn { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-  @keyframes lockPulse { 0%, 100% { box-shadow: 0 0 0 rgba(77,162,255,0); } 50% { box-shadow: 0 0 20px rgba(77,162,255,0.12); } }
-
-  @media (max-width: 768px) {
-    .panels { flex-direction: column; gap: 1.5rem; }
-    .arrow { transform: rotate(90deg); }
-  }
+/* SMALL PHONE */
+@media(max-width:360px){
+  .hero h1{font-size:2.8rem}
+  .page{padding:0 1rem}
+  nav{padding:0.8rem 1rem}
+  .give-canvas,.diary-canvas{max-width:230px;height:150px}
+}
 </style>
 </head>
 <body>
+
 <nav>
-  <svg width="18" height="22" viewBox="0 0 36 44" fill="none"><path d="M27.94 10.59L18.36 1.94C18.16 1.76 17.84 1.76 17.64 1.94L8.06 10.59C2.86 15.28-0.52 22.56 0.06 28.8C0.86 37.78 8.62 43.18 18 43.18C27.38 43.18 35.14 37.78 35.94 28.8C36.52 22.56 33.14 15.28 27.94 10.59Z" fill="#4DA2FF"/></svg>
+  <div class="logo">Give<em>Diary</em></div>
+  <a id="nav-email" href="#" class="nav-contact">Contact</a>
 </nav>
 
 <div class="page">
-  <div class="title-row">
-    <h1>Give<em>Diary</em></h1>
-    <p class="closer">Record the giving → Watch the community thrive.</p>
-  </div>
 
-  <div class="panels">
-    <!-- GIVE: LEFT -->
-    <div class="panel give-panel">
-      <div class="panel-label">Give</div>
+  <!-- ACT 1: WHO GIVES? -->
+  <section class="hero">
+    <h1>Who<br><em>gives?</em></h1>
+  </section>
+
+  <!-- ACT 2: EVERYONE -->
+  <section class="people reveal">
+    <div class="story-line">Everyone gives something to their community.</div>
+    <div class="story-line">The energy. The consistency. The way of making people feel welcome. It's real — the people around feel it every time.</div>
+    <div class="story-line accent">But it's never been captured. What people give to their communities has no record. No home. It lives in the minds of the people who experience it — and nowhere else.</div>
+  </section>
+
+  <!-- ACT 3: WHAT IF -->
+  <section class="turn reveal">
+    <p><strong>What if it did?</strong></p>
+  </section>
+
+  <!-- ACT 4: GIVEDIARY REVEAL -->
+  <section class="resolve reveal">
+    <div class="resolve-name">Give<em>Diary</em></div>
+    <p class="resolve-tagline">Record the giving → Watch the community thrive.</p>
+    <p class="resolve-desc">A private record of who gives — <strong>through your eyes, for your eyes only.</strong></p>
+  </section>
+
+  <!-- ACT 5: GIVE + DIARY PANELS WITH ANIMATIONS -->
+  <section class="panels reveal">
+    <div class="panel">
+      <div class="panel-label give">Give</div>
       <p class="panel-text">What we give to each other is what makes our communities meaningful. Our time, our care, our energy, ourselves.</p>
       <div class="give-canvas">
         <div class="g-dot"></div><div class="g-dot"></div><div class="g-dot"></div><div class="g-dot"></div>
         <div class="g-dot"></div><div class="g-dot"></div><div class="g-dot"></div>
-        <div class="gp"></div><div class="gp"></div><div class="gp"></div><div class="gp"></div>
-        <div class="gp"></div><div class="gp"></div><div class="gp"></div><div class="gp"></div>
-        <div class="gp"></div><div class="gp"></div>
+        <div class="gp"></div><div class="gp"></div><div class="gp"></div>
+        <div class="gp"></div><div class="gp"></div><div class="gp"></div>
       </div>
     </div>
 
-    <!-- ARROW -->
     <div class="arrow">
       <svg viewBox="0 0 24 24" fill="none" stroke="#2a2a38" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </div>
 
-    <!-- DIARY: RIGHT -->
-    <div class="panel diary-panel">
-      <div class="panel-label">Diary</div>
-      <p class="panel-text">What our communities feel like has never been captured. Until now — cryptographically yours, stored on-chain. Through your eyes, for your eyes only, and usable.</p>
+    <div class="panel">
+      <div class="panel-label diary">Diary</div>
+      <p class="panel-text">What our communities feel like to us has never been captured. Until now.</p>
       <div class="diary-canvas">
         <div class="d-vault"><div class="d-vault-spine"></div></div>
         <div class="d-dot"></div><div class="d-dot"></div><div class="d-dot"></div><div class="d-dot"></div>
         <div class="d-dot"></div><div class="d-dot"></div><div class="d-dot"></div>
         <div class="dp"></div><div class="dp"></div><div class="dp"></div><div class="dp"></div>
-        <div class="dp"></div><div class="dp"></div>
         <div class="d-lock-row">
           <div class="d-lock-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="#4da2ff" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 1 1 8 0v4"/></svg>
           </div>
-          <div class="d-sui-badge">
-            <svg viewBox="0 0 36 44" fill="none"><path d="M27.94 10.59L18.36 1.94C18.16 1.76 17.84 1.76 17.64 1.94L8.06 10.59C2.86 15.28-0.52 22.56 0.06 28.8C0.86 37.78 8.62 43.18 18 43.18C27.38 43.18 35.14 37.78 35.94 28.8C36.52 22.56 33.14 15.28 27.94 10.59Z" fill="#4DA2FF"/></svg>
-            Powered by Sui
-          </div>
         </div>
       </div>
     </div>
+  </section>
+
+  <div class="contact reveal">
+    <a id="cta-email" href="#">Contact →</a>
   </div>
 
-  <div class="contact-row"><a href="mailto:dave@givediary.com">Contact →</a></div>
 </div>
 
-<footer>
-  <div class="footer-right"><span>2026</span></div>
-</footer>
+<footer>2026</footer>
+
+<script>
+var u='hello';var d='givediary.com';var e=u+'@'+d;
+document.getElementById('nav-email').href='mail'+'to:'+e;
+document.getElementById('cta-email').href='mail'+'to:'+e;
+var obs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+</script>
+
 </body>
 </html>
