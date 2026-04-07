@@ -1,0 +1,11 @@
+<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Diary -->
+  <rect x="18" y="10" width="44" height="60" rx="3" stroke="#4da2ff" stroke-width="3"/>
+  <!-- Spine -->
+  <rect x="18" y="10" width="6" height="60" rx="2" fill="#4da2ff" opacity="0.4"/>
+  <!-- Lock -->
+  <rect x="34" y="42" width="12" height="9" rx="2" stroke="#4da2ff" stroke-width="2"/>
+  <path d="M37 42L37 38C37 35 40 33 43 35L43 42" stroke="#4da2ff" stroke-width="2" fill="none"/>
+  <!-- Gold corner — the giving enters -->
+  <path d="M62 10L62 26L46 10Z" fill="#f0c674" opacity="0.8"/>
+</svg>
