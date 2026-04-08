@@ -708,6 +708,12 @@ inputEl.addEventListener('input', autoResize);
 
 // ===== Demo Mode Responses =====
 const DEMO_RESPONSES = [
+  // Starter chip responses
+  { triggers: ['it was great', 'was great', 'great session'], response: "Nice. What made it click — the people, the play, or just one of those days where everything lands? And who were you playing with?" },
+  { triggers: ['tough one', 'rough one', 'hard today', 'tough today'], response: "Those stick with you. Was it how you played, the people you were with, or something off about the vibe?" },
+  { triggers: ["didn't play", "did not play", "day off", "skipped"], response: "Sometimes those days tell you more than the ones on court. Missing it, or relieved you skipped?" },
+  { triggers: ["something's on my mind", "on my mind", "thinking about", "need to talk"], response: "This is what the diary's for. What's rattling around?" },
+  // Original responses
   { triggers: ['banger', 'bang', 'slam', 'hammer', 'drive everything'], response: "Ugh, bangers. Was it one person just hammering everything or was the whole group like that? Because there's a difference between one annoying player and a session where nobody dinks." },
   { triggers: ['third shot drop', 'drop is', 'drops are', 'drop finally'], response: "Wait — consistently? That's months of work right there. Are you hitting it cross-court or mostly down the middle? And can opponents still attack it or is it dying in the kitchen?" },
   { triggers: ['stuck at 3.5', 'stuck at 3', '3.5 wall', 'plateau', 'not improving'], response: "The 3.5 wall is real. How long have you been there? And what feels like the thing holding you back — is it a specific shot or more of a game-sense thing?" },
@@ -745,6 +751,16 @@ const DEMO_RESPONSES = [
   }},
 ];
 
+const DEMO_FALLBACKS = [
+  "How was the session? Was it the play, the people, or both that made it what it was?",
+  "Tell me more. Who were you playing with?",
+  "What's the one thing that's going to stick with you from today?",
+  "Interesting. How'd that make you feel out there?",
+  "Was this a solo-queue day or were you with your people?",
+  "That's worth writing down. What else happened?",
+];
+let fallbackIndex = 0;
+
 function getDemoResponse(text) {
   const lower = text.toLowerCase();
   for (const r of DEMO_RESPONSES) {
@@ -752,7 +768,9 @@ function getDemoResponse(text) {
       return typeof r.response === 'function' ? r.response(text) : r.response;
     }
   }
-  return "How was the session? Was it the play, the people, or both that made it what it was?";
+  const fb = DEMO_FALLBACKS[fallbackIndex % DEMO_FALLBACKS.length];
+  fallbackIndex++;
+  return fb;
 }
 
 // ===== Build context-aware system prompt =====
