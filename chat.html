@@ -367,7 +367,7 @@ body {
 .setup-privacy {
   margin-top: 20px;
   font-size: 0.7rem;
-  color: #333;
+  color: #777;
   line-height: 1.5;
   display: flex;
   align-items: center;
@@ -867,14 +867,17 @@ function truncateAddress(addr) {
 }
 
 async function getZkLoginAddress(jwt) {
-  const res = await fetch(ENOKI_API_URL + '/zklogin/address', {
+  const res = await fetch(ENOKI_API_URL + '/zklogin', {
     method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + ENOKI_API_KEY,
       'zklogin-jwt': jwt,
     },
   });
-  if (!res.ok) throw new Error('Enoki API error: ' + res.status);
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error('Enoki API error: ' + res.status + ' ' + body);
+  }
   const data = await res.json();
   return data.address;
 }
