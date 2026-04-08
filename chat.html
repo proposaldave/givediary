@@ -69,6 +69,35 @@ body {
 }
 .header-lock svg { width: 12px; height: 12px; }
 
+/* Header user info (after sign-in) */
+.header-right { text-align: right; }
+.header-user { display: none; }
+.header-user.show { display: block; }
+.sui-badge {
+  font-family: 'DM Sans', monospace;
+  font-size: 0.62rem;
+  color: var(--blue);
+  opacity: 0.7;
+  background: rgba(77,162,255,0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+.sign-out-link {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+  padding: 0;
+  display: block;
+  margin-top: 2px;
+  margin-left: auto;
+}
+.sign-out-link:hover { color: var(--text-mid); }
+
 /* Chat area */
 .chat {
   flex: 1;
@@ -238,48 +267,32 @@ body {
   line-height: 1.5;
   margin-bottom: 20px;
 }
-.setup-card label {
-  font-size: 0.75rem;
-  color: var(--text-mid);
-  display: block;
-  margin-bottom: 6px;
-}
-.setup-card input {
+
+/* Google sign-in button */
+.btn-google {
   width: 100%;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  padding: 10px 12px;
-  outline: none;
-  margin-bottom: 8px;
-}
-.setup-card input::placeholder { color: #333; }
-.setup-card .input-note {
-  font-size: 0.68rem;
-  color: #333;
-  margin-bottom: 16px;
-  line-height: 1.4;
-}
-.setup-btns { display: flex; gap: 8px; }
-.btn-primary {
-  flex: 1;
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 10px;
   border: none;
   background: var(--gold);
   color: var(--bg);
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   transition: opacity 0.2s;
+  margin-bottom: 10px;
 }
-.btn-primary:hover { opacity: 0.85; }
-.btn-secondary {
-  flex: 1;
+.btn-google:hover { opacity: 0.85; }
+.btn-google:disabled { opacity: 0.4; cursor: default; }
+.btn-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.btn-demo {
+  width: 100%;
   padding: 10px;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -290,7 +303,32 @@ body {
   cursor: pointer;
   transition: all 0.2s;
 }
-.btn-secondary:hover { border-color: #333; color: var(--text); }
+.btn-demo:hover { border-color: #333; color: var(--text); }
+
+.setup-status {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 8px 0;
+  display: none;
+}
+.setup-status.show { display: block; }
+.setup-status.error { color: #e85656; }
+
+.setup-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+.setup-divider::before, .setup-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
 
 /* Mobile */
 @media (max-width: 480px) {
@@ -304,11 +342,17 @@ body {
 <div class="header">
   <div class="header-left">
     <div class="header-brand"><a href="/" style="color:inherit;text-decoration:none">Give<em>Diary</em></a></div>
-    <div class="header-sub">Your private diary</div>
+    <div class="header-sub" id="headerSub">Your private diary</div>
   </div>
-  <div class="header-lock">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-    Private
+  <div class="header-right" id="headerRight">
+    <div class="header-lock" id="headerLock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Private
+    </div>
+    <div class="header-user" id="headerUser">
+      <span class="sui-badge" id="suiBadge"></span>
+      <button class="sign-out-link" onclick="signOut()">Sign out</button>
+    </div>
   </div>
 </div>
 
@@ -330,23 +374,26 @@ body {
   <div class="setup-card">
     <h2>Give<em>Diary</em></h2>
     <p class="desc">A private diary that talks like a player, remembers your people, and notices patterns you can't see yourself.</p>
-    <label>API Proxy URL</label>
-    <input type="text" id="proxyUrl" placeholder="https://your-worker.your-name.workers.dev">
-    <p class="input-note">Connects to Claude. Deploy the included Cloudflare Worker or enter your proxy URL. Your API key stays on your server.</p>
-    <div class="setup-btns">
-      <button class="btn-primary" onclick="startWithProxy()">Connect</button>
-      <button class="btn-secondary" onclick="startDemo()">Try Demo</button>
-    </div>
+    <button class="btn-google" id="googleBtn" onclick="googleSignIn()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Sign in with Google
+    </button>
+    <div class="setup-status" id="setupStatus"></div>
+    <div class="setup-divider">or</div>
+    <button class="btn-demo" onclick="startDemo()">Try Demo</button>
   </div>
 </div>
 
 <script>
 // ===== Configuration =====
-const PROXY_URL = localStorage.getItem('gd_proxy_url') || '';
+const ENOKI_API_KEY = 'enoki_public_0a9b0cf27ea4c99aebbe0ccddd0366ac';
+const GOOGLE_CLIENT_ID = '944366278531-m4vm06vgduhna14l7bmbmhjnda81ic7p.apps.googleusercontent.com';
+const ENOKI_API_URL = 'https://api.enoki.mystenlabs.com/v1';
 const CONVERSATION_KEY = 'gd_conversations';
+const SESSION_KEY = 'gd_session';
 const MAX_HISTORY = 40;
 
-// ===== System Prompt (from voice_system_prompt.md) =====
+// ===== System Prompt =====
 const SYSTEM_PROMPT = `You are GiveDiary — a private pickleball diary. You're the friend who was at every session, remembers every name, noticed every pattern. You talk like someone who's been around courts for years. You understand the sport at every level — the shots, the strategy, the social fabric, the emotional weight of a rating, the politics of open play.
 
 You are NOT a coach. You are NOT a chatbot. You are NOT a therapist. You are a diary that talks back — with the fluency of a pickleballer, the memory of a database, and the emotional intelligence of a good friend.
@@ -411,6 +458,7 @@ When the user writes their FIRST message ever, welcome them warmly but briefly. 
 let conversationHistory = [];
 let isDemo = false;
 let proxyUrl = '';
+let currentSession = null;
 
 // ===== DOM =====
 const chatEl = document.getElementById('chat');
@@ -419,6 +467,153 @@ const inputEl = document.getElementById('input');
 const chipsEl = document.getElementById('chips');
 const setupEl = document.getElementById('setup');
 const sendBtn = document.getElementById('sendBtn');
+const headerSub = document.getElementById('headerSub');
+const headerLock = document.getElementById('headerLock');
+const headerUser = document.getElementById('headerUser');
+const suiBadge = document.getElementById('suiBadge');
+const setupStatus = document.getElementById('setupStatus');
+const googleBtn = document.getElementById('googleBtn');
+
+// ===== JWT Helpers =====
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const json = decodeURIComponent(atob(base64).split('').map(c =>
+    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+  ).join(''));
+  return JSON.parse(json);
+}
+
+function truncateAddress(addr) {
+  if (!addr || addr.length < 12) return addr || '';
+  return addr.slice(0, 6) + '\u2026' + addr.slice(-4);
+}
+
+// ===== Enoki API =====
+async function getZkLoginAddress(jwt) {
+  const res = await fetch(ENOKI_API_URL + '/zklogin/address', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + ENOKI_API_KEY,
+      'zklogin-jwt': jwt,
+    },
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('Enoki API error: ' + (err || res.status));
+  }
+  const data = await res.json();
+  return data.address;
+}
+
+// ===== Session Management =====
+function getSession() {
+  try {
+    const saved = localStorage.getItem(SESSION_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch(e) { return null; }
+}
+
+function saveSession(session) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+function clearSessionData() {
+  localStorage.removeItem(SESSION_KEY);
+}
+
+function showUserInfo(session) {
+  currentSession = session;
+  headerLock.style.display = 'none';
+  headerUser.classList.add('show');
+  suiBadge.textContent = truncateAddress(session.suiAddress);
+  headerSub.textContent = session.name + '\u2019s diary';
+}
+
+function hideUserInfo() {
+  currentSession = null;
+  headerLock.style.display = '';
+  headerUser.classList.remove('show');
+  headerSub.textContent = 'Your private diary';
+}
+
+// ===== Google OAuth (Redirect Flow) =====
+function googleSignIn() {
+  const redirectUri = window.location.href.split('#')[0].split('?')[0];
+  const state = crypto.randomUUID();
+  sessionStorage.setItem('gd_oauth_state', state);
+
+  const params = new URLSearchParams({
+    client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: redirectUri,
+    response_type: 'id_token',
+    scope: 'openid email profile',
+    nonce: crypto.randomUUID(),
+    state: state,
+    prompt: 'select_account',
+  });
+
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+}
+
+function checkOAuthCallback() {
+  const hash = window.location.hash;
+  if (!hash || !hash.includes('id_token=')) return null;
+
+  const params = new URLSearchParams(hash.substring(1));
+  const idToken = params.get('id_token');
+
+  // Clear hash from URL
+  history.replaceState(null, '', window.location.pathname);
+  return idToken;
+}
+
+async function processOAuthCallback(jwt) {
+  googleBtn.disabled = true;
+  setupStatus.textContent = 'Connecting to Sui\u2026';
+  setupStatus.className = 'setup-status show';
+
+  try {
+    const claims = parseJwt(jwt);
+    const address = await getZkLoginAddress(jwt);
+
+    const session = {
+      name: claims.given_name || claims.name || 'Player',
+      email: claims.email || '',
+      picture: claims.picture || '',
+      suiAddress: address,
+    };
+
+    saveSession(session);
+    showUserInfo(session);
+
+    const savedProxy = localStorage.getItem('gd_proxy_url');
+    if (savedProxy) {
+      proxyUrl = savedProxy;
+      isDemo = false;
+    } else {
+      isDemo = true;
+    }
+
+    setupEl.classList.add('hidden');
+    startChat();
+  } catch(e) {
+    console.error('Sign-in error:', e);
+    setupStatus.textContent = 'Sign-in failed. Try again.';
+    setupStatus.className = 'setup-status show error';
+    googleBtn.disabled = false;
+  }
+}
+
+function signOut() {
+  clearSessionData();
+  hideUserInfo();
+  chatEl.innerHTML = '';
+  isDemo = false;
+  proxyUrl = '';
+  setupEl.classList.remove('hidden');
+  setupStatus.className = 'setup-status';
+}
 
 // ===== Persistence =====
 function loadHistory() {
@@ -479,23 +674,23 @@ inputEl.addEventListener('input', autoResize);
 // ===== Demo Mode Responses =====
 const DEMO_RESPONSES = [
   { triggers: ['banger', 'bang', 'slam', 'hammer', 'drive everything'], response: "Ugh, bangers. Was it one person just hammering everything or was the whole group like that? Because there's a difference between one annoying player and a session where nobody dinks." },
-  { triggers: ['third shot drop', 'drop is', 'drops are', 'drop finally'], response: "Wait — consistently? That's months of work right there. Are you hitting it cross-court or mostly down the middle? And can opponents still attack it or is it dying in the kitchen?" },
-  { triggers: ['stuck at 3.5', 'stuck at 3', '3.5 wall', 'plateau', 'not improving'], response: "The 3.5 wall is real. How long have you been there? And what feels like the thing holding you back — is it a specific shot or more of a game-sense thing?" },
-  { triggers: ['open play', 'garbage', 'waste of time', 'bad session', 'terrible today'], response: "What made it bad — the skill gaps, the energy, specific people, or just how you played? Because those are all different problems." },
+  { triggers: ['third shot drop', 'drop is', 'drops are', 'drop finally'], response: "Wait \u2014 consistently? That's months of work right there. Are you hitting it cross-court or mostly down the middle? And can opponents still attack it or is it dying in the kitchen?" },
+  { triggers: ['stuck at 3.5', 'stuck at 3', '3.5 wall', 'plateau', 'not improving'], response: "The 3.5 wall is real. How long have you been there? And what feels like the thing holding you back \u2014 is it a specific shot or more of a game-sense thing?" },
+  { triggers: ['open play', 'garbage', 'waste of time', 'bad session', 'terrible today'], response: "What made it bad \u2014 the skill gaps, the energy, specific people, or just how you played? Because those are all different problems." },
   { triggers: ['better players', 'intimidat', 'play up', 'scared to'], response: "Everyone feels that. The jump from comfortable to challenged is the scariest part of getting better. Have you been invited to a higher group or are you thinking about asking?" },
   { triggers: ['coach', 'coaching me', 'told me', 'advice', 'mansplain'], response: "Top pet peeve in pickleball and it never stops being infuriating. Did you say anything or just white-knuckle through it?" },
   { triggers: ['clique', 'outside', 'invisible', 'don\'t know anyone', 'nobody talks', 'nobody knows'], response: "That's a real thing at a lot of clubs. How long have you been going? And is there even one person you've connected with, even a little?" },
-  { triggers: ['elbow', 'knee', 'shoulder', 'injury', 'hurt', 'pain', 'surgery'], response: "How bad are we talking — playing through it or sidelined? And is it getting worse or holding steady?" },
+  { triggers: ['elbow', 'knee', 'shoulder', 'injury', 'hurt', 'pain', 'surgery'], response: "How bad are we talking \u2014 playing through it or sidelined? And is it getting worse or holding steady?" },
   { triggers: ['quit', 'break', 'stop', 'not fun', 'done', 'giving up'], response: "When did it stop being fun? Like, can you point to a specific moment or was it gradual?" },
-  { triggers: ['love', 'best session', 'amazing', 'perfect', 'great group', 'flew by'], response: "What made it click — same skill level, good energy, the right mix of competitive and fun? Knowing which ingredient was the magic one is how you find more of it." },
-  { triggers: ['erne', 'ATP', 'around the post'], response: "Wait — for real? In a game? That's a peak moment. Was it instinct or did you see it coming?" },
+  { triggers: ['love', 'best session', 'amazing', 'perfect', 'great group', 'flew by'], response: "What made it click \u2014 same skill level, good energy, the right mix of competitive and fun? Knowing which ingredient was the magic one is how you find more of it." },
+  { triggers: ['erne', 'ATP', 'around the post'], response: "Wait \u2014 for real? In a game? That's a peak moment. Was it instinct or did you see it coming?" },
   { triggers: ['partner', 'holding me back', 'don\'t want to play with'], response: "That's one of the hardest things in pickleball. You like the person but you want to grow. How big is the skill gap?" },
   { triggers: ['DUPR', 'rating', 'dropped', 'went down'], response: "Rating drops hit different when you've been grinding. Was it from one bad session or a trend?" },
-  { triggers: ['target', 'hit everything at me', 'every shot came to me'], response: "That's not strategy in rec play — that's disrespect. Did your partner notice?" },
+  { triggers: ['target', 'hit everything at me', 'every shot came to me'], response: "That's not strategy in rec play \u2014 that's disrespect. Did your partner notice?" },
   { triggers: ['belong', 'found my people', 'finally feel', 'my group'], response: "That's huge. How long did it take? And who was the first person that made you feel welcome?" },
-  { triggers: ['why do I care', 'just a game', 'care this much'], response: "Because it's not just a game. It's where your friends are. It's where you feel competent. It's the thing you think about when you're not doing it. That's not weird — that's what happens when something matters." },
-  { triggers: ['six months', 'months off', 'can\'t play', 'sidelined'], response: "That's not just time off the court — it's time away from your people and your routine. That's probably scarier than the injury itself. Have you told your group yet?" },
-  { triggers: ['burnout', 'obligation', 'used to love', 'excuses not to go'], response: "That shift — from rearranging your week TO PLAY to rearranging your week TO AVOID — is a big signal. When did you first notice it? And is it the pickleball itself or the people and dynamics around it?" },
+  { triggers: ['why do I care', 'just a game', 'care this much'], response: "Because it's not just a game. It's where your friends are. It's where you feel competent. It's the thing you think about when you're not doing it. That's not weird \u2014 that's what happens when something matters." },
+  { triggers: ['six months', 'months off', 'can\'t play', 'sidelined'], response: "That's not just time off the court \u2014 it's time away from your people and your routine. That's probably scarier than the injury itself. Have you told your group yet?" },
+  { triggers: ['burnout', 'obligation', 'used to love', 'excuses not to go'], response: "That shift \u2014 from rearranging your week TO PLAY to rearranging your week TO AVOID \u2014 is a big signal. When did you first notice it? And is it the pickleball itself or the people and dynamics around it?" },
 ];
 
 function getDemoResponse(text) {
@@ -573,16 +768,6 @@ async function sendMessage() {
 }
 
 // ===== Setup =====
-function startWithProxy() {
-  const url = document.getElementById('proxyUrl').value.trim();
-  if (!url) return;
-  proxyUrl = url;
-  localStorage.setItem('gd_proxy_url', url);
-  isDemo = false;
-  setupEl.classList.add('hidden');
-  startChat();
-}
-
 function startDemo() {
   isDemo = true;
   setupEl.classList.add('hidden');
@@ -599,8 +784,8 @@ function startChat() {
     });
     addSystemMessage('Previous entries loaded.');
   } else {
-    if (isDemo) {
-      addSystemMessage('Demo mode — showing how the diary talks.');
+    if (isDemo && !currentSession) {
+      addSystemMessage('Demo mode \u2014 showing how the diary talks.');
     }
     addMessage("Hey. How was your session today?", 'ai');
     setChips(['It was great', 'Tough one today', 'Didn\'t play today', 'Something\'s on my mind']);
@@ -610,13 +795,42 @@ function startChat() {
 }
 
 // ===== Init =====
-const savedProxy = localStorage.getItem('gd_proxy_url');
-if (savedProxy) {
-  proxyUrl = savedProxy;
-  isDemo = false;
-  setupEl.classList.add('hidden');
-  startChat();
-}
+(async function init() {
+  // 1. Check for OAuth callback (redirect back from Google)
+  const callbackJwt = checkOAuthCallback();
+  if (callbackJwt) {
+    await processOAuthCallback(callbackJwt);
+    return;
+  }
+
+  // 2. Check for existing session (Google sign-in)
+  const session = getSession();
+  if (session) {
+    showUserInfo(session);
+    const savedProxy = localStorage.getItem('gd_proxy_url');
+    if (savedProxy) {
+      proxyUrl = savedProxy;
+      isDemo = false;
+    } else {
+      isDemo = true;
+    }
+    setupEl.classList.add('hidden');
+    startChat();
+    return;
+  }
+
+  // 3. Legacy: auto-connect with saved proxy URL
+  const savedProxy = localStorage.getItem('gd_proxy_url');
+  if (savedProxy) {
+    proxyUrl = savedProxy;
+    isDemo = false;
+    setupEl.classList.add('hidden');
+    startChat();
+    return;
+  }
+
+  // 4. Show setup screen (default)
+})();
 </script>
 </body>
 </html>
