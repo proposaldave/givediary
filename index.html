@@ -31,11 +31,12 @@ nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:c
 .page{max-width:620px;padding:0 2rem}
 
 /* HERO — tighter, with CTA */
-.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;position:relative}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,12vw,8rem);font-weight:700;line-height:0.95;letter-spacing:-0.04em;opacity:0;animation:up 1s ease 0.2s forwards}
 .hero h1 em{font-style:italic;color:#f0c674}
-.hero-sub{font-family:'Playfair Display',serif;font-size:clamp(0.95rem,2.5vw,1.3rem);font-style:italic;color:#444;margin-top:1.5rem;opacity:0;animation:up 1s ease 0.6s forwards}
-.hero-cta{margin-top:2.5rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;opacity:0;animation:up 1s ease 1s forwards}
+.hero-intro{padding:3rem 0 4rem}
+.hero-sub{font-family:'Playfair Display',serif;font-size:clamp(0.95rem,2.5vw,1.3rem);font-style:italic;color:#444}
+.hero-cta{margin-top:2.5rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
 .btn{font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;padding:12px 28px;border-radius:8px;text-decoration:none;transition:all 0.3s;display:inline-block}
 .btn-gold{background:#f0c674;color:#07070b;border:1px solid #f0c674}
 .btn-gold:hover{background:#e0b85a;border-color:#e0b85a}
@@ -190,6 +191,10 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
   <!-- HERO -->
   <section class="hero">
     <h1>Who<br><em>gives?</em></h1>
+  </section>
+
+  <!-- CTA -->
+  <section class="hero-intro reveal">
     <p class="hero-sub">A private record of who gives — through your eyes, for your eyes only.</p>
     <div class="hero-cta">
       <a href="#" onclick="googleSignIn();return false" class="btn btn-gold">Sign in with Google</a>
