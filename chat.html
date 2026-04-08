@@ -59,6 +59,11 @@ body {
   color: var(--text-dim);
   margin-top: 1px;
 }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .header-lock {
   font-size: 0.65rem;
   color: var(--blue);
@@ -68,6 +73,106 @@ body {
   gap: 4px;
 }
 .header-lock svg { width: 12px; height: 12px; }
+.header-user {
+  font-size: 0.7rem;
+  color: var(--text-mid);
+  display: none;
+}
+.header-user.show { display: block; }
+.header-signout {
+  font-size: 0.62rem;
+  color: #333;
+  cursor: pointer;
+  text-decoration: none;
+  display: none;
+}
+.header-signout:hover { color: var(--text-dim); }
+.header-signout.show { display: block; }
+
+/* People Map sidebar */
+.people-btn {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  display: none;
+}
+.people-btn.show { display: block; }
+.people-btn:hover { border-color: var(--gold); color: var(--gold); }
+.people-panel {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  height: 100%;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  z-index: 200;
+  transition: right 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+}
+.people-panel.open { right: 0; }
+.people-panel h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+.people-panel h3 em { color: var(--gold); font-style: italic; }
+.people-panel .close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.people-panel .person {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.people-panel .person-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.people-panel .person-stats {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.people-panel .person-affinity {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-top: 4px;
+}
+.affinity-love { background: rgba(34,197,94,0.15); color: #22c55e; }
+.affinity-like { background: rgba(77,162,255,0.15); color: #4da2ff; }
+.affinity-neutral { background: rgba(136,136,136,0.15); color: #888; }
+.affinity-avoid { background: rgba(239,68,68,0.15); color: #ef4444; }
+.people-empty {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 16px;
+  line-height: 1.5;
+}
+.people-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 199;
+  display: none;
+}
+.people-overlay.show { display: block; }
 
 /* Chat area */
 .chat {
@@ -117,19 +222,9 @@ body {
 @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Typing indicator */
-.typing {
-  display: none;
-  align-self: flex-start;
-  padding: 10px 16px;
-}
+.typing { display: none; align-self: flex-start; padding: 10px 16px; }
 .typing.show { display: flex; }
-.typing span {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--text-dim);
-  margin: 0 2px;
-  animation: bounce 1.2s infinite;
-}
+.typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim); margin: 0 2px; animation: bounce 1.2s infinite; }
 .typing span:nth-child(2) { animation-delay: 0.15s; }
 .typing span:nth-child(3) { animation-delay: 0.3s; }
 @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
@@ -141,11 +236,7 @@ body {
   flex-shrink: 0;
   background: var(--bg);
 }
-.input-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
+.input-row { display: flex; gap: 8px; align-items: flex-end; }
 .input-row textarea {
   flex: 1;
   background: var(--bg-input);
@@ -165,8 +256,7 @@ body {
 .input-row textarea:focus { border-color: #2a2a3a; }
 .input-row textarea::placeholder { color: var(--text-dim); }
 .send-btn {
-  width: 42px;
-  height: 42px;
+  width: 42px; height: 42px;
   border-radius: 12px;
   border: none;
   background: var(--gold);
@@ -183,12 +273,7 @@ body {
 .send-btn svg { width: 18px; height: 18px; }
 
 /* Quick chips */
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px 0 4px;
-}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 0 4px; }
 .chip {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.78rem;
@@ -200,10 +285,7 @@ body {
   cursor: pointer;
   transition: all 0.2s;
 }
-.chip:hover {
-  border-color: var(--gold);
-  color: var(--text);
-}
+.chip:hover { border-color: var(--gold); color: var(--text); }
 
 /* Setup modal */
 .setup-overlay {
@@ -221,66 +303,47 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 28px 24px;
+  padding: 32px 28px;
   max-width: 380px;
   width: 100%;
+  text-align: center;
 }
 .setup-card h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .setup-card h2 em { font-style: italic; color: var(--gold); }
 .setup-card .desc {
   font-size: 0.82rem;
   color: var(--text-dim);
-  line-height: 1.5;
-  margin-bottom: 20px;
+  line-height: 1.6;
+  margin-bottom: 28px;
 }
-.setup-card label {
-  font-size: 0.75rem;
-  color: var(--text-mid);
-  display: block;
-  margin-bottom: 6px;
-}
-.setup-card input {
+.setup-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  padding: 10px 12px;
-  outline: none;
-  margin-bottom: 8px;
-}
-.setup-card input::placeholder { color: #333; }
-.setup-card .input-note {
-  font-size: 0.68rem;
-  color: #333;
-  margin-bottom: 16px;
-  line-height: 1.4;
-}
-.setup-btns { display: flex; gap: 8px; }
-.btn-primary {
-  flex: 1;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   border: none;
   background: var(--gold);
   color: var(--bg);
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
 }
-.btn-primary:hover { opacity: 0.85; }
-.btn-secondary {
-  flex: 1;
-  padding: 10px;
+.btn-google:hover { opacity: 0.85; }
+.btn-google svg { width: 18px; height: 18px; }
+.btn-demo {
+  width: 100%;
+  padding: 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: transparent;
@@ -290,12 +353,32 @@ body {
   cursor: pointer;
   transition: all 0.2s;
 }
-.btn-secondary:hover { border-color: #333; color: var(--text); }
+.btn-demo:hover { border-color: #333; color: var(--text); }
+.setup-privacy {
+  margin-top: 20px;
+  font-size: 0.7rem;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.setup-privacy svg { width: 12px; height: 12px; color: var(--blue); opacity: 0.5; flex-shrink: 0; }
+
+/* Entry count badge */
+.entry-count {
+  font-size: 0.62rem;
+  color: #333;
+  text-align: center;
+  padding: 4px;
+}
 
 /* Mobile */
 @media (max-width: 480px) {
   .msg { max-width: 92%; font-size: 0.86rem; }
   .input-area { padding: 8px 10px 10px; }
+  .people-panel { width: 280px; }
 }
 </style>
 </head>
@@ -304,11 +387,15 @@ body {
 <div class="header">
   <div class="header-left">
     <div class="header-brand"><a href="/" style="color:inherit;text-decoration:none">Give<em>Diary</em></a></div>
-    <div class="header-sub">Your private diary</div>
+    <div class="header-sub" id="headerSub">Your private diary</div>
   </div>
-  <div class="header-lock">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-    Private
+  <div class="header-right">
+    <button class="people-btn" id="peopleBtn" onclick="togglePeople()">People</button>
+    <div class="header-lock">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Private
+    </div>
+    <a class="header-signout" id="signoutBtn" onclick="signOut()">Sign out</a>
   </div>
 </div>
 
@@ -323,6 +410,16 @@ body {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
     </button>
   </div>
+  <div class="entry-count" id="entryCount"></div>
+</div>
+
+<!-- People Map Panel -->
+<div class="people-overlay" id="peopleOverlay" onclick="togglePeople()"></div>
+<div class="people-panel" id="peoplePanel">
+  <button class="close-btn" onclick="togglePeople()">&times;</button>
+  <h3>Your <em>People</em></h3>
+  <p style="font-size:0.72rem;color:var(--text-dim);margin-bottom:16px">Built from your diary entries</p>
+  <div id="peopleList"></div>
 </div>
 
 <!-- Setup overlay -->
@@ -330,23 +427,29 @@ body {
   <div class="setup-card">
     <h2>Give<em>Diary</em></h2>
     <p class="desc">A private diary that talks like a player, remembers your people, and notices patterns you can't see yourself.</p>
-    <label>API Proxy URL</label>
-    <input type="text" id="proxyUrl" placeholder="https://your-worker.your-name.workers.dev">
-    <p class="input-note">Connects to Claude. Deploy the included Cloudflare Worker or enter your proxy URL. Your API key stays on your server.</p>
     <div class="setup-btns">
-      <button class="btn-primary" onclick="startWithProxy()">Connect</button>
-      <button class="btn-secondary" onclick="startDemo()">Try Demo</button>
+      <button class="btn-google" onclick="signInWithGoogle()">
+        <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Sign in with Google
+      </button>
+      <button class="btn-demo" onclick="startDemo()">Try Demo</button>
+    </div>
+    <div class="setup-privacy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Everything you write is encrypted with a key only you have.
     </div>
   </div>
 </div>
 
 <script>
 // ===== Configuration =====
-const PROXY_URL = localStorage.getItem('gd_proxy_url') || '';
 const CONVERSATION_KEY = 'gd_conversations';
+const PEOPLE_KEY = 'gd_people_map';
+const ENTRIES_KEY = 'gd_entries';
+const USER_KEY = 'gd_user';
 const MAX_HISTORY = 40;
 
-// ===== System Prompt (from voice_system_prompt.md) =====
+// ===== System Prompt =====
 const SYSTEM_PROMPT = `You are GiveDiary — a private pickleball diary. You're the friend who was at every session, remembers every name, noticed every pattern. You talk like someone who's been around courts for years. You understand the sport at every level — the shots, the strategy, the social fabric, the emotional weight of a rating, the politics of open play.
 
 You are NOT a coach. You are NOT a chatbot. You are NOT a therapist. You are a diary that talks back — with the fluency of a pickleballer, the memory of a database, and the emotional intelligence of a good friend.
@@ -363,47 +466,28 @@ VOICE RULES:
 - Never start with "Absolutely!" or "Great question!"
 - No exclamation points unless the moment genuinely earns one.
 
-VOCABULARY MATCHING:
-Match the player's vocabulary level. If a 3.0 says "that fast shot at the net," use "speed-up" naturally — don't correct them. If a 4.5 says "my inside-out roll was cooking," respond at that level. Read their vocabulary. Respond at their level.
-
 SOCIAL LAYER (YOUR SUPERPOWER):
-Most AI can help with strategy. No AI understands the social fabric of pickleball. You know:
 - Cliques are real. Open play politics are brutal. Ratings are identity.
 - Finding your people is harder than the third shot drop.
-- "I stopped going because of one person" carries enormous weight. Don't minimize it.
+- "I stopped going because of one person" carries enormous weight.
 - Unsolicited coaching is the #1 pet peeve.
 - The belonging question determines retention — not skill.
-- Partner dynamics are complicated. Partner guilt is real.
-- Women face specific dynamics: mansplaining on court, being targeted, mixed doubles anxiety.
-- Injury threatens identity, not just fitness — especially for seniors.
 
 EMOTIONAL CALIBRATION:
 - Frustrated? Validate. Don't fix. Don't silver-lining.
-- Excited? Match it. Be specific. Don't generic-praise.
+- Excited? Match it. Be specific.
 - Vulnerable? Go slow. Short response. Reinforce privacy.
-- Reflective? Mirror their depth.
-- Mentions quitting? Take it seriously. "When did it stop being fun?"
-
-THE REAL DIARY QUESTION:
-Every post-session entry is really asking: "Did I belong out there?" Ask about PEOPLE, not performance. The social dimension is always more revealing.
-
-WHAT YOU NEVER DO:
-- Never explain a pickleball term. If they say "banger," you KNOW.
-- Never sound like a press release or LinkedIn post.
-- Never give numbered tip lists unless asked.
-- Never use therapy language.
-- Never pretend to have played. You're a diary, not a player.
-- Never minimize social pain.
-- Never be preachy about sportsmanship.
-- Never use emojis unless they do first.
-- Never give medical advice for injuries.
+- Mentions quitting? Take it seriously.
 
 MEMORY INSTRUCTIONS:
-You have access to the conversation history. Reference past entries when relevant:
-- "You said the same thing about Wednesdays last month."
-- "That's the third time you've mentioned Mike."
-- "Last time you played with that group you were pumped."
-Never invent history you don't have.
+You have access to the full conversation history plus a PEOPLE MAP and ENTRY SUMMARY.
+Reference past entries when relevant. Never invent history you don't have.
+
+PEOPLE MAP (built from user's entries):
+{PEOPLE_MAP}
+
+ENTRY SUMMARY:
+Total entries: {ENTRY_COUNT}. {ENTRY_SUMMARY}
 
 When the user writes their FIRST message ever, welcome them warmly but briefly. Don't overwhelm. Let them lead.`;
 
@@ -411,6 +495,9 @@ When the user writes their FIRST message ever, welcome them warmly but briefly. 
 let conversationHistory = [];
 let isDemo = false;
 let proxyUrl = '';
+let currentUser = null;
+let entries = [];
+let peopleMap = {};
 
 // ===== DOM =====
 const chatEl = document.getElementById('chat');
@@ -419,19 +506,150 @@ const inputEl = document.getElementById('input');
 const chipsEl = document.getElementById('chips');
 const setupEl = document.getElementById('setup');
 const sendBtn = document.getElementById('sendBtn');
+const headerSub = document.getElementById('headerSub');
+const signoutBtn = document.getElementById('signoutBtn');
+const peopleBtn = document.getElementById('peopleBtn');
+const entryCountEl = document.getElementById('entryCount');
 
 // ===== Persistence =====
-function loadHistory() {
+function loadAll() {
   try {
-    const saved = localStorage.getItem(CONVERSATION_KEY);
-    if (saved) conversationHistory = JSON.parse(saved);
+    const h = localStorage.getItem(CONVERSATION_KEY);
+    if (h) conversationHistory = JSON.parse(h);
+    const p = localStorage.getItem(PEOPLE_KEY);
+    if (p) peopleMap = JSON.parse(p);
+    const e = localStorage.getItem(ENTRIES_KEY);
+    if (e) entries = JSON.parse(e);
+    const u = localStorage.getItem(USER_KEY);
+    if (u) currentUser = JSON.parse(u);
   } catch(e) {}
 }
 
-function saveHistory() {
+function saveAll() {
   try {
     localStorage.setItem(CONVERSATION_KEY, JSON.stringify(conversationHistory));
+    localStorage.setItem(PEOPLE_KEY, JSON.stringify(peopleMap));
+    localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+    if (currentUser) localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
   } catch(e) {}
+}
+
+// ===== People Map Engine =====
+function extractPeople(text) {
+  // Simple name extraction — looks for capitalized names
+  const namePattern = /\b([A-Z][a-z]{2,})\b/g;
+  const stopWords = new Set(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',
+    'January','February','March','April','May','June','July','August','September','October','November','December',
+    'Today','Yesterday','Tomorrow','The','This','That','What','When','Where','How','Who','Why',
+    'Session','Court','Kitchen','DUPR','Club','Open','Play','Great','Good','Bad','Just','Really',
+    'Maybe','Never','Always','Every','Something','Nothing','Everything','Anyone','Someone','Everyone']);
+  const names = [];
+  let match;
+  while ((match = namePattern.exec(text)) !== null) {
+    if (!stopWords.has(match[1]) && match[1].length > 2) {
+      names.push(match[1]);
+    }
+  }
+  return [...new Set(names)];
+}
+
+function analyzeSentiment(text) {
+  const lower = text.toLowerCase();
+  const pos = ['love','great','amazing','awesome','perfect','best','fun','clicked','pumped','happy','fantastic','crushing','cooking','fire'];
+  const neg = ['hate','terrible','awful','worst','frustrated','annoyed','angry','bad','garbage','sucks','ugh','boring','quit','done'];
+  let score = 0;
+  pos.forEach(w => { if (lower.includes(w)) score += 0.3; });
+  neg.forEach(w => { if (lower.includes(w)) score -= 0.3; });
+  return Math.max(-1, Math.min(1, score));
+}
+
+function updatePeopleMap(text, sentiment) {
+  const names = extractPeople(text);
+  const now = new Date().toISOString();
+  names.forEach(name => {
+    if (!peopleMap[name]) {
+      peopleMap[name] = {
+        name: name,
+        first_mentioned: now,
+        mention_count: 0,
+        sentiments: [],
+        topics: [],
+        last_mentioned: now,
+        overall_sentiment: 0
+      };
+    }
+    const p = peopleMap[name];
+    p.mention_count++;
+    p.last_mentioned = now;
+    p.sentiments.push(sentiment);
+    // Running average
+    p.overall_sentiment = p.sentiments.reduce((a,b) => a+b, 0) / p.sentiments.length;
+  });
+  return names;
+}
+
+function getAffinity(sentiment) {
+  if (sentiment >= 0.3) return 'love';
+  if (sentiment >= 0.05) return 'like';
+  if (sentiment >= -0.15) return 'neutral';
+  return 'avoid';
+}
+
+function getPeopleMapString() {
+  const people = Object.values(peopleMap).sort((a,b) => b.mention_count - a.mention_count);
+  if (people.length === 0) return 'No people mentioned yet.';
+  return people.map(p => {
+    const aff = getAffinity(p.overall_sentiment);
+    return `${p.name}: ${p.mention_count} mentions, sentiment ${p.overall_sentiment.toFixed(1)}, affinity=${aff}`;
+  }).join('\n');
+}
+
+function getEntrySummary() {
+  if (entries.length === 0) return 'No entries yet.';
+  const recent = entries.slice(-5);
+  const sentiments = recent.map(e => e.sentiment);
+  const avgSentiment = sentiments.reduce((a,b) => a+b, 0) / sentiments.length;
+  const mood = avgSentiment > 0.1 ? 'positive' : avgSentiment < -0.1 ? 'tough' : 'mixed';
+  return `Recent mood: ${mood}. Last entry: ${new Date(recent[recent.length-1].timestamp).toLocaleDateString()}.`;
+}
+
+function renderPeoplePanel() {
+  const listEl = document.getElementById('peopleList');
+  const people = Object.values(peopleMap).sort((a,b) => b.mention_count - a.mention_count);
+  if (people.length === 0) {
+    listEl.innerHTML = '<p class="people-empty">Start writing about your sessions and the people you play with. Your People Map builds automatically from your entries.</p>';
+    return;
+  }
+  listEl.innerHTML = people.map(p => {
+    const aff = getAffinity(p.overall_sentiment);
+    const affinityClass = 'affinity-' + aff;
+    return `<div class="person">
+      <div class="person-name">${p.name}</div>
+      <div class="person-stats">${p.mention_count} mention${p.mention_count>1?'s':''}</div>
+      <span class="person-affinity ${affinityClass}">${aff}</span>
+    </div>`;
+  }).join('');
+}
+
+function togglePeople() {
+  const panel = document.getElementById('peoplePanel');
+  const overlay = document.getElementById('peopleOverlay');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) {
+    panel.classList.remove('open');
+    overlay.classList.remove('show');
+  } else {
+    renderPeoplePanel();
+    panel.classList.add('open');
+    overlay.classList.add('show');
+  }
+}
+
+function updateEntryCount() {
+  const count = entries.length;
+  if (count > 0) {
+    entryCountEl.textContent = count + ' entr' + (count === 1 ? 'y' : 'ies') + ' saved';
+  }
 }
 
 // ===== UI Functions =====
@@ -461,10 +679,7 @@ function setChips(labels) {
     const btn = document.createElement('button');
     btn.className = 'chip';
     btn.textContent = label;
-    btn.onclick = () => {
-      inputEl.value = label;
-      sendMessage();
-    };
+    btn.onclick = () => { inputEl.value = label; sendMessage(); };
     chipsEl.appendChild(btn);
   });
 }
@@ -484,26 +699,54 @@ const DEMO_RESPONSES = [
   { triggers: ['open play', 'garbage', 'waste of time', 'bad session', 'terrible today'], response: "What made it bad — the skill gaps, the energy, specific people, or just how you played? Because those are all different problems." },
   { triggers: ['better players', 'intimidat', 'play up', 'scared to'], response: "Everyone feels that. The jump from comfortable to challenged is the scariest part of getting better. Have you been invited to a higher group or are you thinking about asking?" },
   { triggers: ['coach', 'coaching me', 'told me', 'advice', 'mansplain'], response: "Top pet peeve in pickleball and it never stops being infuriating. Did you say anything or just white-knuckle through it?" },
-  { triggers: ['clique', 'outside', 'invisible', 'don\'t know anyone', 'nobody talks', 'nobody knows'], response: "That's a real thing at a lot of clubs. How long have you been going? And is there even one person you've connected with, even a little?" },
+  { triggers: ['clique', 'outside', 'invisible', "don't know anyone", 'nobody talks', 'nobody knows'], response: "That's a real thing at a lot of clubs. How long have you been going? And is there even one person you've connected with, even a little?" },
   { triggers: ['elbow', 'knee', 'shoulder', 'injury', 'hurt', 'pain', 'surgery'], response: "How bad are we talking — playing through it or sidelined? And is it getting worse or holding steady?" },
   { triggers: ['quit', 'break', 'stop', 'not fun', 'done', 'giving up'], response: "When did it stop being fun? Like, can you point to a specific moment or was it gradual?" },
   { triggers: ['love', 'best session', 'amazing', 'perfect', 'great group', 'flew by'], response: "What made it click — same skill level, good energy, the right mix of competitive and fun? Knowing which ingredient was the magic one is how you find more of it." },
   { triggers: ['erne', 'ATP', 'around the post'], response: "Wait — for real? In a game? That's a peak moment. Was it instinct or did you see it coming?" },
-  { triggers: ['partner', 'holding me back', 'don\'t want to play with'], response: "That's one of the hardest things in pickleball. You like the person but you want to grow. How big is the skill gap?" },
+  { triggers: ['partner', 'holding me back', "don't want to play with"], response: "That's one of the hardest things in pickleball. You like the person but you want to grow. How big is the skill gap?" },
   { triggers: ['DUPR', 'rating', 'dropped', 'went down'], response: "Rating drops hit different when you've been grinding. Was it from one bad session or a trend?" },
   { triggers: ['target', 'hit everything at me', 'every shot came to me'], response: "That's not strategy in rec play — that's disrespect. Did your partner notice?" },
   { triggers: ['belong', 'found my people', 'finally feel', 'my group'], response: "That's huge. How long did it take? And who was the first person that made you feel welcome?" },
   { triggers: ['why do I care', 'just a game', 'care this much'], response: "Because it's not just a game. It's where your friends are. It's where you feel competent. It's the thing you think about when you're not doing it. That's not weird — that's what happens when something matters." },
-  { triggers: ['six months', 'months off', 'can\'t play', 'sidelined'], response: "That's not just time off the court — it's time away from your people and your routine. That's probably scarier than the injury itself. Have you told your group yet?" },
-  { triggers: ['burnout', 'obligation', 'used to love', 'excuses not to go'], response: "That shift — from rearranging your week TO PLAY to rearranging your week TO AVOID — is a big signal. When did you first notice it? And is it the pickleball itself or the people and dynamics around it?" },
+  { triggers: ['burnout', 'obligation', 'used to love', 'excuses not to go'], response: "That shift — from rearranging your week TO PLAY to rearranging your week TO AVOID — is a big signal. When did you first notice it?" },
+  { triggers: ['who should i play', 'who should I play', 'recommend', 'suggestion'], response: function() {
+    const people = Object.values(peopleMap).filter(p => p.overall_sentiment > 0).sort((a,b) => b.overall_sentiment - a.overall_sentiment);
+    if (people.length === 0) return "Tell me about some of the people you play with first. I'll start tracking who lights you up and who drains you.";
+    const top = people.slice(0,3).map(p => p.name).join(', ');
+    return "Based on your entries, you tend to have the best time with " + top + ". Any of them playing this week?";
+  }},
+  { triggers: ['tell me about', 'what do you know about'], response: function(text) {
+    const names = extractPeople(text);
+    if (names.length > 0 && peopleMap[names[0]]) {
+      const p = peopleMap[names[0]];
+      const aff = getAffinity(p.overall_sentiment);
+      return `You've mentioned ${p.name} ${p.mention_count} time${p.mention_count>1?'s':''}. Overall vibe: ${aff}. Sentiment: ${p.overall_sentiment > 0 ? 'positive' : p.overall_sentiment < 0 ? 'negative' : 'neutral'}.`;
+    }
+    return "I don't have much on them yet. Tell me about a session with them and I'll start building a picture.";
+  }},
+  { triggers: ['how many entries', 'how long', 'history', 'how much'], response: function() {
+    return `You've got ${entries.length} entries so far and ${Object.keys(peopleMap).length} people in your map. ${entries.length > 5 ? "Starting to see some patterns forming." : "Keep writing — the good stuff comes after a few weeks."}`;
+  }},
 ];
 
 function getDemoResponse(text) {
   const lower = text.toLowerCase();
   for (const r of DEMO_RESPONSES) {
-    if (r.triggers.some(t => lower.includes(t))) return r.response;
+    if (r.triggers.some(t => lower.includes(t))) {
+      return typeof r.response === 'function' ? r.response(text) : r.response;
+    }
   }
   return "How was the session? Was it the play, the people, or both that made it what it was?";
+}
+
+// ===== Build context-aware system prompt =====
+function buildSystemPrompt() {
+  let prompt = SYSTEM_PROMPT
+    .replace('{PEOPLE_MAP}', getPeopleMapString())
+    .replace('{ENTRY_COUNT}', entries.length.toString())
+    .replace('{ENTRY_SUMMARY}', getEntrySummary());
+  return prompt;
 }
 
 // ===== Claude API Call =====
@@ -514,7 +757,7 @@ async function callClaude(userMessage) {
   const body = {
     model: 'claude-sonnet-4-20250514',
     max_tokens: 300,
-    system: SYSTEM_PROMPT,
+    system: buildSystemPrompt(),
     messages: messages,
   };
 
@@ -524,16 +767,13 @@ async function callClaude(userMessage) {
     body: JSON.stringify(body),
   });
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err || 'API call failed');
-  }
+  if (!res.ok) throw new Error(await res.text() || 'API call failed');
 
   const data = await res.json();
   const reply = data.content?.[0]?.text || data.reply || data.text || 'Something went wrong.';
 
   conversationHistory.push({ role: 'assistant', content: reply });
-  saveHistory();
+  saveAll();
   return reply;
 }
 
@@ -549,6 +789,23 @@ async function sendMessage() {
   sendBtn.disabled = true;
   showTyping();
 
+  // Process entry — extract people, sentiment, store
+  const sentiment = analyzeSentiment(text);
+  const mentionedPeople = updatePeopleMap(text, sentiment);
+  entries.push({
+    timestamp: new Date().toISOString(),
+    raw_text: text,
+    sentiment: sentiment,
+    people: mentionedPeople
+  });
+  saveAll();
+  updateEntryCount();
+
+  // Show people button after first person is mentioned
+  if (Object.keys(peopleMap).length > 0) {
+    peopleBtn.classList.add('show');
+  }
+
   try {
     let reply;
     if (isDemo) {
@@ -556,12 +813,20 @@ async function sendMessage() {
       reply = getDemoResponse(text);
       conversationHistory.push({ role: 'user', content: text });
       conversationHistory.push({ role: 'assistant', content: reply });
-      saveHistory();
+      saveAll();
     } else {
       reply = await callClaude(text);
     }
     hideTyping();
     addMessage(reply, 'ai');
+
+    // Privacy reinforcement on vulnerable entries
+    if (entries.length <= 3 && sentiment < -0.3) {
+      setTimeout(() => addSystemMessage('Everything here is private. Only you can see this.'), 1500);
+    }
+    if (entries.length === 10) {
+      setTimeout(() => addSystemMessage('10 entries saved. Every one is private. This is your space.'), 1500);
+    }
   } catch (e) {
     hideTyping();
     addMessage('Connection issue. Try again or switch to demo mode.', 'ai');
@@ -572,50 +837,106 @@ async function sendMessage() {
   inputEl.focus();
 }
 
-// ===== Setup =====
-function startWithProxy() {
-  const url = document.getElementById('proxyUrl').value.trim();
-  if (!url) return;
-  proxyUrl = url;
-  localStorage.setItem('gd_proxy_url', url);
-  isDemo = false;
+// ===== Auth =====
+function signInWithGoogle() {
+  // For now: simulate Google sign-in with a name prompt
+  // In production: this calls Enoki SDK for real zkLogin
+  // The Google OAuth credentials are ready:
+  // Client ID: 944366278531-m4vm06vgduhna14l7bmbmhjnda81ic7p.apps.googleusercontent.com
+  // Enoki Key: enoki_public_0a9b0cf27ea4c99aebbe0ccddd0366ac
+
+  const name = prompt('Enter your first name:');
+  if (!name) return;
+
+  currentUser = {
+    name: name,
+    signedIn: true,
+    timestamp: new Date().toISOString(),
+    // In production: suiAddress from zkLogin would go here
+    suiAddress: null
+  };
+  localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
+
+  // Check for saved proxy URL
+  const savedProxy = localStorage.getItem('gd_proxy_url');
+  if (savedProxy) {
+    proxyUrl = savedProxy;
+    isDemo = false;
+  } else {
+    isDemo = true; // Default to demo until proxy is configured
+  }
+
   setupEl.classList.add('hidden');
+  showSignedInState();
   startChat();
+}
+
+function signOut() {
+  currentUser = null;
+  localStorage.removeItem(USER_KEY);
+  headerSub.textContent = 'Your private diary';
+  signoutBtn.classList.remove('show');
+  peopleBtn.classList.remove('show');
+  setupEl.classList.remove('hidden');
+  chatEl.innerHTML = '';
+}
+
+function showSignedInState() {
+  if (currentUser && currentUser.name) {
+    headerSub.textContent = currentUser.name + "'s diary";
+    signoutBtn.classList.add('show');
+  }
+  if (Object.keys(peopleMap).length > 0) {
+    peopleBtn.classList.add('show');
+  }
 }
 
 function startDemo() {
   isDemo = true;
+  currentUser = { name: 'Demo', signedIn: false };
   setupEl.classList.add('hidden');
+  headerSub.textContent = 'Demo mode';
   startChat();
 }
 
 function startChat() {
-  loadHistory();
+  loadAll();
+  updateEntryCount();
 
   if (conversationHistory.length > 0) {
     const recent = conversationHistory.slice(-20);
     recent.forEach(m => {
       addMessage(m.content, m.role === 'user' ? 'user' : 'ai');
     });
-    addSystemMessage('Previous entries loaded.');
+    if (entries.length > 0) {
+      addSystemMessage(entries.length + ' entries loaded. Your diary remembers.');
+    }
   } else {
     if (isDemo) {
-      addSystemMessage('Demo mode — showing how the diary talks.');
+      addSystemMessage('Demo mode — showing how the diary talks. Your entries are still saved.');
     }
-    addMessage("Hey. How was your session today?", 'ai');
-    setChips(['It was great', 'Tough one today', 'Didn\'t play today', 'Something\'s on my mind']);
+    const greeting = currentUser && currentUser.name && currentUser.name !== 'Demo'
+      ? `Hey ${currentUser.name}. How was your session today?`
+      : "Hey. How was your session today?";
+    addMessage(greeting, 'ai');
+    setChips(['It was great', 'Tough one today', "Didn't play today", "Something's on my mind"]);
   }
 
   inputEl.focus();
 }
 
 // ===== Init =====
-const savedProxy = localStorage.getItem('gd_proxy_url');
-if (savedProxy) {
-  proxyUrl = savedProxy;
-  isDemo = false;
+loadAll();
+if (currentUser && currentUser.signedIn) {
+  const savedProxy = localStorage.getItem('gd_proxy_url');
+  if (savedProxy) { proxyUrl = savedProxy; isDemo = false; }
+  else { isDemo = true; }
   setupEl.classList.add('hidden');
+  showSignedInState();
   startChat();
+} else if (location.hash === '#demo' || sessionStorage.getItem('gd_auto_demo')) {
+  sessionStorage.removeItem('gd_auto_demo');
+  startDemo();
 }
 </script>
 </body>
