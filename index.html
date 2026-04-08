@@ -180,7 +180,7 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 <nav>
   <div class="logo"><svg width="24" height="24" viewBox="0 0 80 80" fill="none" style="vertical-align:middle;margin-right:6px"><rect x="18" y="10" width="44" height="60" rx="3" stroke="#4da2ff" stroke-width="3"/><rect x="18" y="10" width="6" height="60" rx="2" fill="#4da2ff" opacity="0.4"/><rect x="34" y="42" width="12" height="9" rx="2" stroke="#4da2ff" stroke-width="2"/><path d="M37 42L37 38C37 35 40 33 43 35L43 42" stroke="#4da2ff" stroke-width="2" fill="none"/><path d="M62 10L62 26L46 10Z" fill="#f0c674" opacity="0.8"/></svg>Give<em>Diary</em></div>
   <div class="nav-links">
-    <a href="/chat.html" class="nav-cta">Try it</a>
+    <a href="#" onclick="googleSignIn();return false" class="nav-cta">Sign in</a>
     <a id="nav-email" href="#">Contact</a>
   </div>
 </nav>
@@ -192,8 +192,8 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
     <h1>Who<br><em>gives?</em></h1>
     <p class="hero-sub">A private record of who gives — through your eyes, for your eyes only.</p>
     <div class="hero-cta">
-      <a href="/chat.html" class="btn btn-gold">Try the diary</a>
-      <a href="/chat.html#demo" class="btn btn-ghost">Demo</a>
+      <a href="#" onclick="googleSignIn();return false" class="btn btn-gold">Sign in with Google</a>
+      <a href="/chat.html#demo" class="btn btn-ghost">Try Demo</a>
     </div>
   </section>
 
@@ -252,8 +252,8 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 
   <!-- BOTTOM CTA -->
   <div class="bottom-cta reveal">
-    <a href="/chat.html" class="btn btn-gold">Try the diary</a>
-    <a href="/chat.html#demo" class="btn btn-ghost">Demo</a>
+    <a href="#" onclick="googleSignIn();return false" class="btn btn-gold">Sign in with Google</a>
+    <a href="/chat.html#demo" class="btn btn-ghost">Try Demo</a>
   </div>
 
   <div class="contact">
@@ -276,6 +276,17 @@ document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
 // Auto-start demo if hash is #demo
 if(location.hash==='#demo'){
   sessionStorage.setItem('gd_auto_demo','1');
+}
+// Google OAuth redirect (lands on chat.html with JWT)
+function googleSignIn(){
+  var cid='944366278531-m4vm06vgduhna14l7bmbmhjnda81ic7p.apps.googleusercontent.com';
+  var redirect=location.origin+'/chat.html';
+  var p=new URLSearchParams({
+    client_id:cid,redirect_uri:redirect,response_type:'id_token',
+    scope:'openid email profile',nonce:crypto.randomUUID(),
+    state:crypto.randomUUID(),prompt:'select_account'
+  });
+  location.href='https://accounts.google.com/o/oauth2/v2/auth?'+p.toString();
 }
 </script>
 
