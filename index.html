@@ -6,12 +6,10 @@
 <title>GiveDiary</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg' fill='none'%3E%3Crect x='18' y='10' width='44' height='60' rx='3' stroke='%234da2ff' stroke-width='3'/%3E%3Crect x='18' y='10' width='6' height='60' rx='2' fill='%234da2ff' opacity='0.4'/%3E%3Cpath d='M62 10L62 26L46 10Z' fill='%23f0c674' opacity='0.8'/%3E%3C/svg%3E">
 <meta name="description" content="GiveDiary — a private record of who gives. Through your eyes, for your eyes only.">
-<!-- Open Graph -->
 <meta property="og:title" content="GiveDiary — Who gives?">
 <meta property="og:description" content="A private record of who gives — through your eyes, for your eyes only.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://givediary.com">
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GiveDiary — Who gives?">
 <meta name="twitter:description" content="A private record of who gives — through your eyes, for your eyes only.">
@@ -21,29 +19,37 @@
 body{font-family:'DM Sans',sans-serif;background:#07070b;color:#e8e6e1;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;z-index:10}
 
-/* NAV */
 nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:5}
 .logo{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;letter-spacing:-0.02em}
 .logo em{font-style:italic;color:#f0c674}
-.nav-contact{font-size:0.8rem;color:#444;text-decoration:none;transition:color 0.3s;padding:0.5rem 0}
-.nav-contact:hover{color:#e8e6e1}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-links a{font-size:0.8rem;color:#444;text-decoration:none;transition:color 0.3s;padding:0.5rem 0}
+.nav-links a:hover{color:#e8e6e1}
+.nav-links a.nav-cta{color:#f0c674;border-bottom:1px solid #3a3020}
+.nav-links a.nav-cta:hover{border-color:#f0c674}
 
-/* PAGE CONTAINER */
 .page{max-width:620px;padding:0 2rem}
 
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative}
+/* HERO — tighter, with CTA */
+.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;position:relative}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,12vw,8rem);font-weight:700;line-height:0.95;letter-spacing:-0.04em;opacity:0;animation:up 1s ease 0.2s forwards}
 .hero h1 em{font-style:italic;color:#f0c674}
+.hero-sub{font-family:'Playfair Display',serif;font-size:clamp(0.95rem,2.5vw,1.3rem);font-style:italic;color:#444;margin-top:1.5rem;opacity:0;animation:up 1s ease 0.6s forwards}
+.hero-cta{margin-top:2.5rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;opacity:0;animation:up 1s ease 1s forwards}
+.btn{font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;padding:12px 28px;border-radius:8px;text-decoration:none;transition:all 0.3s;display:inline-block}
+.btn-gold{background:#f0c674;color:#07070b;border:1px solid #f0c674}
+.btn-gold:hover{background:#e0b85a;border-color:#e0b85a}
+.btn-ghost{background:transparent;color:#5a5a68;border:1px solid #1e1e2a}
+.btn-ghost:hover{color:#e8e6e1;border-color:#333}
 .hero::before{content:'';position:fixed;top:8%;right:-12%;width:500px;height:500px;background:radial-gradient(circle,rgba(240,198,116,0.025) 0%,transparent 70%);pointer-events:none}
 
 /* STORY */
-.people{padding:2rem 0 4rem}
+.people{padding:2rem 0 3rem}
 .story-line{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3vw,1.5rem);line-height:1.65;color:#555;font-weight:400;margin-bottom:1.8rem}
 .story-line strong{color:#e8e6e1;font-weight:700}
 
-/* TURN — bigger, more breathing room */
-.turn{padding:12rem 0 6rem}
+/* TURN */
+.turn{padding:5rem 0 3rem}
 .turn p{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4.5vw,2.2rem);line-height:1.4;color:#444;font-weight:400}
 .turn p strong{color:#e8e6e1;font-weight:700}
 
@@ -96,10 +102,11 @@ nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:c
 .d-lock-icon{width:36px;height:36px;border:1px solid rgba(77,162,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:lockPulse 3s ease-in-out infinite}
 .d-lock-icon svg{width:14px;height:14px}
 
-/* CONTACT */
-.contact{padding:2.5rem 0}
-.contact a{font-size:0.85rem;color:#555;text-decoration:none;border-bottom:1px solid #1e1e2a;padding:0.5rem 0 0.25rem;transition:all 0.3s;display:inline-block}
-.contact a:hover{color:#f0c674;border-color:#f0c674}
+/* BOTTOM CTA */
+.bottom-cta{padding:3rem 0 2rem;border-top:1px solid #1a1a24;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.contact{padding:1rem 0 2.5rem}
+.contact a{font-size:0.8rem;color:#444;text-decoration:none;transition:color 0.3s}
+.contact a:hover{color:#e8e6e1}
 
 footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 
@@ -119,10 +126,10 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
   .give-canvas,.diary-canvas{max-width:300px;height:200px}
   .d-vault{width:90%;max-width:260px;height:85%;max-height:180px}
   .panel-text{max-width:320px}
-  .people{padding:1.5rem 0 3.5rem}
-  .turn{padding:4rem 0}
+  .people{padding:1.5rem 0 3rem}
+  .turn{padding:3rem 0 2rem}
   .resolve{padding:2.5rem 0 2rem}
-  .hero{min-height:75vh}
+  .hero{min-height:60vh}
   footer{padding:2.5rem 1.5rem 1.5rem}
 }
 
@@ -130,10 +137,11 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 @media(max-width:480px){
   nav{padding:1rem 1.2rem}
   .page{padding:0 1.2rem;max-width:100%}
-  .hero{min-height:70vh}
+  .hero{min-height:55vh}
   .hero h1{font-size:clamp(3rem,15vw,5rem)}
+  .hero-cta{flex-direction:column;align-items:flex-start}
   .story-line{font-size:clamp(1rem,4vw,1.2rem);margin-bottom:1.5rem}
-  .turn{padding:3.5rem 0}
+  .turn{padding:2.5rem 0 1.5rem}
   .turn p{font-size:clamp(1.3rem,5vw,1.8rem)}
   .resolve-name{font-size:clamp(2rem,10vw,3rem)}
   .resolve-desc{font-size:0.9rem}
@@ -153,13 +161,12 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
   .dp:nth-child(11){--tx:-35px;--ty:35px}
   .dp:nth-child(12){--tx:45px;--ty:-10px}
   .dp:nth-child(13){--tx:-20px;--ty:-18px}
-  .contact a{font-size:0.9rem;padding:0.6rem 0 0.3rem}
-  .people{padding:1rem 0 3rem}
+  .people{padding:1rem 0 2.5rem}
   .resolve{padding:2rem 0 1.5rem}
+  .bottom-cta{flex-direction:column;align-items:flex-start}
   footer{padding:2rem 1.2rem 1.5rem}
 }
 
-/* SMALL PHONE */
 @media(max-width:360px){
   .hero h1{font-size:2.8rem}
   .page{padding:0 1rem}
@@ -172,36 +179,44 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 
 <nav>
   <div class="logo"><svg width="24" height="24" viewBox="0 0 80 80" fill="none" style="vertical-align:middle;margin-right:6px"><rect x="18" y="10" width="44" height="60" rx="3" stroke="#4da2ff" stroke-width="3"/><rect x="18" y="10" width="6" height="60" rx="2" fill="#4da2ff" opacity="0.4"/><rect x="34" y="42" width="12" height="9" rx="2" stroke="#4da2ff" stroke-width="2"/><path d="M37 42L37 38C37 35 40 33 43 35L43 42" stroke="#4da2ff" stroke-width="2" fill="none"/><path d="M62 10L62 26L46 10Z" fill="#f0c674" opacity="0.8"/></svg>Give<em>Diary</em></div>
-  <a id="nav-email" href="#" class="nav-contact">Contact</a>
+  <div class="nav-links">
+    <a href="/chat.html" class="nav-cta">Try it</a>
+    <a id="nav-email" href="#">Contact</a>
+  </div>
 </nav>
 
 <div class="page">
 
-  <!-- ACT 1: WHO GIVES? -->
+  <!-- HERO -->
   <section class="hero">
     <h1>Who<br><em>gives?</em></h1>
+    <p class="hero-sub">A private record of who gives — through your eyes, for your eyes only.</p>
+    <div class="hero-cta">
+      <a href="/chat.html" class="btn btn-gold">Try the diary</a>
+      <a href="/chat.html#demo" class="btn btn-ghost">Demo</a>
+    </div>
   </section>
 
-  <!-- ACT 2: EVERYONE -->
+  <!-- STORY -->
   <section class="people reveal">
     <div class="story-line">Everyone gives something to their community.</div>
     <div class="story-line">The energy. The consistency. The way of making people feel welcome. <strong>That's what a community is</strong> — not the place, not the schedule. The people, and what they give to each other.</div>
-    <div class="story-line accent"><strong>But it's invisible.</strong> What people give to their communities has no record. No home. It lives in the hearts and minds of the people who experience it — and nowhere else.</div>
+    <div class="story-line"><strong>But it's invisible.</strong> What people give has no record. No home. It lives in hearts and minds — and nowhere else.</div>
   </section>
 
-  <!-- ACT 3: WHAT IF — bigger, more breathing room -->
+  <!-- TURN -->
   <section class="turn reveal">
     <p><strong>What if it did?</strong></p>
   </section>
 
-  <!-- ACT 4: GIVEDIARY REVEAL -->
+  <!-- GIVEDIARY REVEAL -->
   <section class="resolve reveal">
     <div class="resolve-name">Give<em>Diary</em></div>
-    <p class="resolve-tagline">Record the giving → Watch your community thrive.</p>
+    <p class="resolve-tagline">Record the giving. Watch your community thrive.</p>
     <p class="resolve-desc">Your private diary of who gives — <strong>through your eyes, for your eyes only.</strong></p>
   </section>
 
-  <!-- ACT 5: GIVE + DIARY PANELS WITH ANIMATIONS -->
+  <!-- GIVE + DIARY PANELS -->
   <section class="panels reveal">
     <div class="panel">
       <div class="panel-label give">Give</div>
@@ -235,10 +250,14 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
     </div>
   </section>
 
-  <div class="contact reveal">
-    <a href="/chat.html" style="font-size:0.85rem;color:#f0c674;text-decoration:none;border-bottom:1px solid #3a3020;padding:0.5rem 0 0.25rem;transition:all 0.3s;display:inline-block;margin-bottom:1.5rem">Try the diary →</a>
-    <br>
-    <a id="cta-email" href="#">Contact →</a>
+  <!-- BOTTOM CTA -->
+  <div class="bottom-cta reveal">
+    <a href="/chat.html" class="btn btn-gold">Try the diary</a>
+    <a href="/chat.html#demo" class="btn btn-ghost">Demo</a>
+  </div>
+
+  <div class="contact">
+    <a id="cta-email" href="#">dave@gnt.ai</a>
   </div>
 
 </div>
@@ -249,10 +268,15 @@ footer{padding:3rem 2rem 2rem;font-size:0.6rem;color:#1e1e2a}
 var u='dave';var d='gnt.ai';var e=u+'@'+d;
 document.getElementById('nav-email').href='mail'+'to:'+e;
 document.getElementById('cta-email').href='mail'+'to:'+e;
+// Lower threshold so reveals fire on tall viewports
 var obs=new IntersectionObserver(function(entries){
   entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
-},{threshold:0.15});
+},{threshold:0.05,rootMargin:'0px 0px -5% 0px'});
 document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el)});
+// Auto-start demo if hash is #demo
+if(location.hash==='#demo'){
+  sessionStorage.setItem('gd_auto_demo','1');
+}
 </script>
 
 </body>
