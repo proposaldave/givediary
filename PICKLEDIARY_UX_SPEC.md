@@ -19,16 +19,13 @@ ChatGPT is a smart stranger. PickleDiary is a friend who was at every session yo
 **How it works technically:**
 - Every message the user sends is stored as a structured entry with metadata: timestamp, extracted player names, extracted topics (skill work, frustration, joy, people, goals), sentiment
 - An LLM processes each entry on ingest to extract: mentioned players, session date/location if stated, emotional tone, skill references, explicit preferences
-- Entries are chunked and embedded for semantic search — "what did I say about my backhand?" retrieves every backhand mention across months
-- A running "player profile" document is maintained per mentioned person — updated after every entry that mentions them
+- Entries are chunked and embedded for semantic search
+- A running "player profile" document is maintained per mentioned person
 
 **User experience:**
-- User says: "My backhand still sucks"
-- Diary responds: "You said that in February too. But in March you mentioned your drops were landing. What changed?"
-- User says: "Tell me about Mike"
-- Diary responds: "You've mentioned Mike 12 times. Mostly frustration — he slams too much, kills the rally. You had one good session with him in March when you played outdoors. You haven't mentioned him in 3 weeks."
-- User says: "How was my month?"
-- Diary responds with a summary: sessions played, people mentioned most, emotional arc, breakthroughs noted, recurring frustrations
+- "My backhand still sucks" -> "You said that in February too. But in March you mentioned your drops were landing. What changed?"
+- "Tell me about Mike" -> "You've mentioned Mike 12 times. Mostly frustration..."
+- "How was my month?" -> summary: sessions played, people mentioned most, emotional arc, breakthroughs, recurring frustrations
 
 **Data model per entry:**
 ```json
@@ -57,15 +54,15 @@ ChatGPT is a smart stranger. PickleDiary is a friend who was at every session yo
 
 ## Feature 2: Your People Map
 
-**What it does:** Builds a private social graph of your community — entirely from YOUR perspective. Every person you mention gets a profile that accumulates over time. Nobody else sees this. It's YOUR view of YOUR people.
+**What it does:** Builds a private social graph of your community — entirely from YOUR perspective. Every person you mention gets a profile that accumulates over time. Nobody else sees this.
 
 **What ChatGPT can't do:** Know who anyone in your life is.
 
 **How it works technically:**
-- Name entity recognition on every entry — extract player names, nicknames, pronouns resolved to names when possible
+- Name entity recognition on every entry
 - Fuzzy matching: "Mike", "Big Mike", "that tall guy Mike" -> same person
-- Per-person profile accumulates: times mentioned, sentiment distribution, contexts (which days, which groups), what you've said about them, play style observations, affinity score (derived from how you talk about them)
-- The people map is a ranked list: top = people you talk about most positively, bottom = people you avoid
+- Per-person profile accumulates: times mentioned, sentiment distribution, contexts, play style observations, affinity score
+- People map is a ranked list: top = most positive, bottom = avoid
 
 **Data model per person:**
 ```json
@@ -83,7 +80,7 @@ ChatGPT is a smart stranger. PickleDiary is a friend who was at every session yo
   "days_associated": ["Wednesday"],
   "affinity": "avoid",
   "last_mentioned": "ISO date",
-  "summary": "Aggressive player. Slams everything. You've had 1 good session out of 12 mentions. Mostly avoid."
+  "summary": "Aggressive player. Slams everything. 1 good session out of 12 mentions. Mostly avoid."
 }
 ```
 
@@ -99,37 +96,25 @@ ChatGPT is a smart stranger. PickleDiary is a friend who was at every session yo
 
 ## Feature 3: Pattern Engine
 
-**What it does:** Surfaces insights the player can't see themselves — because they don't have the data or the perspective. The diary reads across weeks and months and finds what the player is too close to notice.
+**What it does:** Surfaces insights the player can't see themselves. Reads across weeks and months.
 
 **What ChatGPT can't do:** Analyze anything across sessions. It has no history.
 
-**Pattern types to detect:**
+**Pattern types:**
 
-**Temporal patterns:**
-- "You're frustrated after Wednesday sessions 4 out of the last 5 weeks."
-- "You play your best when you mention playing in the morning."
-- "You haven't played in 8 days."
-
-**People patterns:**
-- "Every session with Sarah gets a positive entry."
-- "You mention frustration with Mike only when you're in the same group."
-- "You've mentioned wanting to play with better players 4 times but haven't signed up for the 4.0 group."
-
-**Skill patterns:**
-- "You mentioned your backhand 8 times in January (all negative), 3 times in February (mixed), once in March (positive). It's improving faster than you think."
-- "You bring up dinking when you're happy and banging when you're frustrated."
-
-**Emotional patterns:**
-- "Your entries are more positive when you play with 3 specific people."
-- "You're hardest on yourself after competitive events."
+- Temporal: "You're frustrated after Wednesday sessions 4 out of the last 5 weeks."
+- People: "Every session with Sarah gets a positive entry."
+- Skill: "Your backhand mentions went from 8 (all negative) in January to 1 (positive) in March. Improving faster than you think."
+- Emotional: "You're hardest on yourself after competitive events."
 
 **How insights surface (UX):**
-- NOT as a dashboard or report. As conversation.
-- Diary volunteers insights naturally — not as a report, as a friend noticing something
-- User can ask: "Any patterns you see?"
+- As conversation, NOT dashboards or reports
+- Diary volunteers insights naturally — as a friend noticing something
+- "Last Wednesday was tough. How was this one?"
+- "I'm noticing something. Want to hear it?"
 
 **What to build:**
-1. Weekly pattern scan across all entries surfacing 1-2 insights
+1. Weekly pattern scan surfacing 1-2 insights
 2. Temporal correlation engine: day x sentiment, time x sentiment, people x sentiment
 3. Skill mention tracker with trajectory
 4. Proactive nudges woven into conversation
@@ -143,59 +128,50 @@ ChatGPT is a smart stranger. PickleDiary is a friend who was at every session yo
 - All diary entries encrypted with keys derived from Google login via Sui zkLogin
 - Encryption happens in the browser BEFORE data leaves the device
 - Server stores ciphertext — unreadable without user's key
-- Even the team cannot decrypt entries — architectural, not policy
-- Deleting account deletes encrypted blobs permanently
+- Even the team cannot decrypt — architectural, not policy
+- Delete account = permanent, unrecoverable
 
 **Trust-building moments (UX):**
-- First entry: explain once, briefly
-- First vulnerable entry: reinforce gently
-- After 10 entries: "You've written 10 entries. Every one is private."
-- Never again after that
+- First entry: "Everything you write here is locked with a key only you have. Not even we can read it."
+- First vulnerable entry: "That took courage to write. No one will ever see this but you."
+- After 10 entries: "You've written 10 entries. Every one is private. This is your space."
+- Never again after that — trust is built
+
+**What to build:**
+1. Client-side Seal encryption (replace placeholder)
+2. Vulnerability detection -> gentle privacy reinforcement
+3. Onboarding flow in human language
+4. Settings page with simple visual explainer
+5. Account deletion flow
 
 ---
 
 ## Feature 7: Session Ritual
 
-Post-session flow: how'd it go -> who'd you play with -> highlight -> anything bugging you -> done. 2 minutes. Becomes habit.
+Post-session flow: how'd it go -> who'd you play with -> highlight -> anything bugging you -> done. 2 minutes. Becomes habit like stretching after a workout.
 
 ## Feature 8: Your Pickleball Story
 
-After enough entries, generate YOUR STORY — a narrative of your journey. Longitudinal narrative generator.
+After enough entries, generate YOUR STORY — a narrative of your journey across months. Longitudinal narrative generator.
 
 ## Feature 9: The Mirror
 
-Contradiction detector — compares stated goals to actual behavior. Surfaces gently.
+Contradiction detector — "You say you want to improve, but you haven't mentioned practicing once in 6 weeks." Not judgmental. Honest. Like a good friend who notices things.
 
-## Feature 10: Daily Audio Briefing (DAY 1 FEATURE)
+## Feature 10: Vocabulary That Grows With You
 
-5-10 minute AI audio briefing. Listen on drive to pickleball. ElevenLabs TTS.
-
-**Build order:**
-1. Daily briefing generator via TTS (generate text -> ElevenLabs API -> audio)
-2. Voice input option (speech-to-text -> process as text entry)
-3. Full voice conversation mode (ElevenLabs Conversational AI)
-
-## Feature 11: Vocabulary That Grows With You
-
-Match player's vocabulary level. Introduce terms naturally as they advance.
+Match player's vocabulary level. A 3.0 says "that fast shot." A 4.5 says "inside-out speed-up off the bounce." Introduce terms naturally as they advance.
 
 ---
 
 ## Priority Order for Building
 
-**DAY 1 (launch features):**
-1. Memory (#1) — foundation
-2. People Map (#2) — emotionally resonant
-3. Daily Audio Briefing (#10) — word of mouth driver
-4. Privacy (#5) — real Seal encryption
-5. Pickleball Voice (#6)
-
-**WEEK 2+:**
-6. Pattern Engine (#3)
-7. Session Ritual (#7)
-8. Voice Conversation Mode (#10 Mode 2)
-
-**MONTH 2+:**
-9. Your Story (#8)
-10. The Mirror (#9)
-11. Growing Vocabulary (#11)
+1. **Memory** (#1) — without this, it's just ChatGPT. Foundation.
+2. **People Map** (#2) — most emotionally resonant. "It knows my people."
+3. **Privacy** (#5) — real Seal encryption. Replaces placeholder.
+4. **Pattern Engine** (#3) — needs enough entries. Build after memory accumulates.
+5. **Pickleball Voice** (#6) — separate spec (PICKLEDIARY_VOICE_SPEC.md)
+6. **Session Ritual** (#7) — already prototyped, sharpen
+7. **Your Story** (#8) — unlock after 30+ entries
+8. **The Mirror** (#9) — unlock after 20+ entries
+9. **Growing Vocabulary** (#10) — ongoing, tied to #6
